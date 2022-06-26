@@ -1,6 +1,4 @@
 import prisma from "../../../lib/prisma";
-import { decode } from "../../../utils/bcrypt";
-import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import auth from "../../../middlewares/auth";
 
@@ -13,7 +11,7 @@ export default async function handle(
 ) {
   const isAuth = auth(req, res);
   if (!isAuth) return res.status(401).send({ message: "Access Denied !!!" });
-  
+
   const settings = await prisma.settings.findMany({
     include: { user: { select: { username: true } } },
   });
