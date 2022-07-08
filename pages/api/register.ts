@@ -21,7 +21,6 @@ export default async function handle(
   req.body.password = await encode(req.body.password);
 
   const newUser = await prisma.user.create({ data: req.body });
-  console.log(newUser);
   res.json({
     token: jwt.sign(newUser, "tinyCmsJwtKey"),
     message: "Register Successfully",

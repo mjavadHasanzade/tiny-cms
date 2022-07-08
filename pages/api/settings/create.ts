@@ -12,7 +12,6 @@ export default async function handle(
   const isAuth = auth(req, res);
   if (!isAuth) return res.status(401).send({ message: "Access Denied !!!" });
   req.body.userId = req.user.id;
-  console.log(req.body);
 
   const settings = await prisma.settings.create({ data: req.body });
 
