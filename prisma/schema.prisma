@@ -34,7 +34,7 @@ model Settings {
 
 model Slogan {
   id         Int          @id @default(autoincrement())
-  name       String
+  name       String       @unique
   title      String
   content    String?
   image      String?
