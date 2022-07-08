@@ -21,7 +21,6 @@ model User {
   settings Settings[]
   slogans  Slogan[]
   posts    Post[]
-  comments Comment[]
 }
 
 model Settings {
@@ -65,11 +64,20 @@ model Post {
 }
 
 model Comment {
-  id       Int     @id @default(autoincrement())
-  userName String
-  text     String?
-  post     Post    @relation(fields: [postId], references: [id])
-  postId   Int
-  user     User    @relation(fields: [userId], references: [id])
-  userId   Int
+  id        Int      @id @default(autoincrement())
+  userName  String
+  text      String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  thread    Thread[]
+}
+
+model Thread {
+  id        Int      @id @default(autoincrement())
+  userName  String
+  text      String
+  createdAt DateTime @default(now())
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  commentId Int
 }
