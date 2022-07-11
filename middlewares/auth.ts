@@ -7,6 +7,7 @@ const auth = (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const user = jwt.verify(String(token), "tinyCmsJwtKey");
+    //@ts-ignore
     req.user = user;
     return req;
   } catch (ex) {

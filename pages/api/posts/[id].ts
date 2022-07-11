@@ -26,6 +26,7 @@ export default async function handle(
       res.status(400).send({ message: "invalid Id", error });
     }
   } else {
+    //@ts-ignore
     req.body.userId = req.user.id;
 
     try {
