@@ -1,5 +1,5 @@
 import theme from "@utils/theme";
-import React, { FC } from "react";
+import React, { FC, CSSProperties } from "react";
 import styled from "styled-components";
 
 interface Props {
@@ -7,6 +7,8 @@ interface Props {
   hasBorder?: boolean;
   className?: string;
   important?: "primary" | "secondary" | "thired";
+  styles?: CSSProperties;
+  tag?: React.ElementType | undefined;
 }
 
 const Title: FC<Props> = ({
@@ -14,9 +16,19 @@ const Title: FC<Props> = ({
   hasBorder = true,
   className,
   important,
+  styles,
+  tag,
+  ...rest
 }) => {
   return (
-    <TitleST hasBorder={hasBorder} className={className} important={important}>
+    <TitleST
+      styles={styles}
+      hasBorder={hasBorder}
+      className={className}
+      important={important}
+      as={tag}
+      {...rest}
+    >
       {children}
     </TitleST>
   );
@@ -27,6 +39,8 @@ export default Title;
 interface ITitleST {
   hasBorder?: boolean;
   important?: "primary" | "secondary" | "thired";
+  styles?: CSSProperties;
+  tag?: React.ElementType | undefined;
 }
 
 const TitleST = styled.h3<ITitleST>`
@@ -43,4 +57,6 @@ const TitleST = styled.h3<ITitleST>`
   border-bottom: ${(props) =>
     props.hasBorder ? "1px solid" + theme.colors.primary : null};
   color: ${theme.colors.primary};
+
+  ${(props) => (props.styles ? props.styles : null)}
 `;
