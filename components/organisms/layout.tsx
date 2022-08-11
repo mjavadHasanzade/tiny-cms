@@ -15,8 +15,8 @@ const GlobalStyle = createGlobalStyle`
     html, body {
     height: 100%;
     overflow-x: hidden;
-    font-family: "Poppins", sans-serif;
-    font-family: "Edu SA Beginner", cursive;
+    font-family: 'M PLUS Rounded 1c',-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     ${(props) =>
       // @ts-ignore
       !props.theme.rtl &&
