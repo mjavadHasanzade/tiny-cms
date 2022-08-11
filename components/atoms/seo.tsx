@@ -21,7 +21,7 @@ const Seo: FC<ISeo> = ({ title, children, favicon = "/imgs/NSA.png" }) => {
         crossOrigin={"crossOrigin"}
       />
       <link
-        href="https://fonts.googleapis.com/css2?family=Edu+SA+Beginner:wght@500;700&family=Poppins:wght@300&display=swap"
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;700&display=swap"
         rel="stylesheet"
       />
     </Head>
