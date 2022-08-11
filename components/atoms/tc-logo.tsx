@@ -140,7 +140,7 @@ const TCWrapper = styled.div`
     animation: rote 2s ease infinite;
     span {
       &:nth-child(1) {
-        animation: dotter1 2s ease infinite;
+        animation: dotter1 1s ease infinite;
       }
       &:nth-child(2) {
         animation: dotter2 2s ease infinite;
@@ -149,7 +149,7 @@ const TCWrapper = styled.div`
         animation: dotter3 2s ease infinite;
       }
       &:nth-child(4) {
-        animation: dotter4 2s ease infinite;
+        animation: dotter4 1s ease infinite;
       }
     }
   }
