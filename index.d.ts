@@ -22,3 +22,12 @@ interface IComments {
   userName: String;
   text?: String;
 }
+
+interface ISlogan {
+  id: number;
+  name: String;
+  title: String;
+  content?: String;
+  image?: String;
+  subContent?: { id: Int; name: String; content?: String; image?: String }[];
+}
