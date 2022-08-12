@@ -106,6 +106,10 @@ const SidebarContainerST = styled.div`
   justify-content: start;
   margin: 32px 0;
   border-right: 1px solid ${theme.colors.tertiary};
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #fff;
 `;
 
 const SidebarLogo = styled.div`

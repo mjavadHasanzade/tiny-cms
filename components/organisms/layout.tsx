@@ -145,7 +145,9 @@ const Main = styled.main<IMain>`
   min-height: calc(100vh - 64px);
   .childrenContent {
     padding: 1rem 2rem;
-    width: ${(props) => (props.isLogin ? "80%" : "100%")};
-    flex: 0 0 ${(props) => (props.isLogin ? "80%" : "100%")};
+    width: ${(props) => (props.isLogin ? "85%" : "100%")};
+    flex: 0 0 ${(props) => (props.isLogin ? "85%" : "100%")};
+    margin-left: auto;
   }
+
 `;
