@@ -68,9 +68,7 @@ const Input: FC<IInput> = ({
 export default Input;
 
 const Inputer = styled.input`
-  background-color: ${theme.colors.secondary};
-  border-radius: 10px;
-  border: 0.5px solid ${theme.colors.primary};
+  border: 0.5px solid ${theme.colors.primary}40;
   padding: 1rem;
   display: inline-block;
   margin: 2rem 0 0 0;
