@@ -9,9 +9,9 @@ export const setCookie = (
   document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
 };
 
-export const getCookie = (cookieName: string) => {
+export const getCookie = (cookieName: string, cookieStr: string) => {
   let name = cookieName + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
+  let decodedCookie = decodeURIComponent(cookieStr);
   let ca = decodedCookie.split(";");
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
