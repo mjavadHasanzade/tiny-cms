@@ -11,6 +11,7 @@ import Link from "next/link";
 import generateDate from "@utils/dateGen";
 import Check from "@atoms/check";
 import { getCookie } from "@utils/cookie";
+import prisma from "lib/prisma";
 
 type Props = {
   head?: Array<string>;
@@ -19,6 +20,7 @@ type Props = {
   height?: string;
   title?: string;
   tablePath: string;
+  apiPath: string;
   actions?: boolean;
 };
 
@@ -35,11 +37,11 @@ const Table: FC<Props> = ({
   minus = [""],
   actions = false,
   tablePath,
+  apiPath,
 }) => {
   const [tableBody, setTableBody] = useState(body);
   // const { addToast } = useToasts();
   //   const { setLoaderActiver } = useAppContext();
-  let token: string;
 
   if (minus.length >= 1) {
     head = objectExtracter(tableBody.length >= 1 ? tableBody[0] : {}, minus);
@@ -49,36 +51,17 @@ const Table: FC<Props> = ({
 
   let cols = head.length;
 
-  //   const deleteItem = async (path: string, id: number | string) => {
-  //     setLoaderActiver(true);
-  //     getAxiosInstanse()
-  //       .delete(path + id, {
-  //         headers: {
-  //           "x-auth": getCookie("token"),
-  //         },
-  //       })
-  //       .then((res) => {
-  //         addToast(res.data.message, { appearance: "success" });
-  //         getAxiosInstanse()
-  //           .get(path, {
-  //             headers: {
-  //               "x-auth": getCookie("token"),
-  //             },
-  //           })
-  //           .then((res2) => setTableBody(res2.data.rows));
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         try {
-  //           addToast(err.response.data.message, { appearance: "error" });
-  //         } catch (error) {
-  //           addToast("Something went wrong", { appearance: "error" });
-  //         }
-  //       })
-  //       .finally(() => {
-  //         setLoaderActiver(false);
-  //       });
-  //   };
+  const deleteItem = async (path: string, id: number | string) => {
+    // setLoaderActiver(true);
+    fetch(path + id, {
+      method: "delete",
+      headers: { xauth: getCookie("xauth", document.cookie) },
+    }).then(async (res) => {
+      const newrows = await fetch(apiPath);
+      const tb = await newrows.json();
+      setTableBody(tb.slogans);
+    });
+  };
 
   return (
     <div>
@@ -136,7 +119,7 @@ const Table: FC<Props> = ({
                 <span className="actions">
                   <button
                     className="delete"
-                    onClick={() => deleteItem(tablePath, item.id)}
+                    onClick={() => deleteItem(apiPath, item.id)}
                   >
                     <FiTrash2 />
                   </button>
