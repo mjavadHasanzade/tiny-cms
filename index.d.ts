@@ -8,12 +8,12 @@ interface IAny {
 }
 
 interface IPosts {
-  id: Number;
+  id: number;
   title: string;
   description: string;
   cover?: string;
   createdAt: string;
-  published: Boolean;
+  published: boolean;
   postComments: IComments[];
 }
 
