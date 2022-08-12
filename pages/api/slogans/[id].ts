@@ -23,6 +23,8 @@ export default async function handle(
       res.status(400).send({ message: "invalid Id", error });
     }
   } else {
+    req.body = JSON.parse(req.body);
+
     //@ts-ignore
     req.body.userId = req.user.id;
     const { name, title, content, image, userId, subContent } = req.body;
@@ -36,10 +38,13 @@ export default async function handle(
           image,
           userId,
           title,
-          subContent: {
-            connect: subContent,
-          },
         },
+      });
+      await prisma.subContent.deleteMany({ where: { sloganId: slogan.id } });
+      subContent.map(async (item: ISubContent) => {
+        await prisma.subContent.create({
+          data: { ...item, sloganId: slogan.id },
+        });
       });
       res.send({ message: "Slogan Edited Successfully", slogan });
     } catch (error) {
