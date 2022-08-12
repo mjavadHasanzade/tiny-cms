@@ -9,9 +9,9 @@ interface IAny {
 
 interface IPosts {
   id: Number;
-  title: String;
-  description: String;
-  cover?: String;
+  title: string;
+  description: string;
+  cover?: string;
   createdAt: string;
   published: Boolean;
   postComments: IComments[];
@@ -19,15 +19,24 @@ interface IPosts {
 
 interface IComments {
   id: number;
-  userName: String;
-  text?: String;
+  userName: string;
+  text?: string;
 }
 
 interface ISlogan {
-  id: number;
-  name: String;
-  title: String;
-  content?: String;
-  image?: String;
-  subContent?: { id: Int; name: String; content?: String; image?: String }[];
+  id?: number;
+  name: string;
+  title: string;
+  content?: string;
+  image?: string;
+  subContent?: ISubContent[];
+}
+
+interface ISubContent {
+  id?: number;
+  sloganId?: number;
+  name: string;
+  title?: string;
+  content?: string;
+  image?: string;
 }
