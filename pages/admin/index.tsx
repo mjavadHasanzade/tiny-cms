@@ -1,5 +1,5 @@
 import Layout from "@organisms/layout";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Title from "@atoms/title";
 import Seo from "@atoms/seo";
 import theme from "@utils/theme";
@@ -8,6 +8,8 @@ import Tile from "@molecules/tile";
 import { GrIteration, GrHtml5 } from "react-icons/gr";
 import { CgEye } from "react-icons/cg";
 import Table from "@organisms/table";
+import { getCookie } from "@utils/cookie";
+import jwt from "jsonwebtoken";
 
 const TABLE = [
   { id: 1, username: "Mjavad", comments: "آه هویریه" },
@@ -73,7 +75,24 @@ const Home: NextPage = () => {
 
 export default Home;
 
-// export const getServerSideProps = () => {};
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = getCookie("xauth", ctx.req.headers.cookie as string);
+
+  const isAuth = jwt.verify(token, "tinyCmsJwtKey");
+
+  if (!token || !isAuth) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
 
 const TilesWrapper = styled.div`
   display: flex;
