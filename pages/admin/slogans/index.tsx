@@ -35,7 +35,7 @@ const Slogans: NextPage<ISloganPage> = ({ slogans }) => {
       <Table
         body={slogans}
         tablePath="slogans/"
-        deletePath="/api/slogans/"
+        apiPath="/api/slogans/"
         minus={["name", "userId", "id"]}
         actions
       />
