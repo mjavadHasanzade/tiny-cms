@@ -11,9 +11,12 @@ export default async function handle(
 ) {
   const isAuth = auth(req, res);
   if (!isAuth) return res.status(401).send({ message: "Access Denied !!!" });
+  req.body = JSON.parse(req.body);
+
   //@ts-ignore
   req.body.userId = req.user.id;
 
+  console.log(req.body);
   try {
     const post = await prisma.post.create({
       data: req.body,
