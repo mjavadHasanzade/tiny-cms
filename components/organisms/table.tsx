@@ -12,6 +12,7 @@ import generateDate from "@utils/dateGen";
 import Check from "@atoms/check";
 import { getCookie } from "@utils/cookie";
 import prisma from "lib/prisma";
+import stripTags from "@utils/stripe-tags";
 
 type Props = {
   head?: Array<string>;
@@ -89,7 +90,7 @@ const Table: FC<Props> = ({
               head.map((headItem: any, i) =>
                 headItem === "content" || headItem === "description" ? (
                   <span className="tableSimpleDescription">
-                    {item[headItem]}
+                    {stripTags(item[headItem])}
                   </span>
                 ) : (
                   <span key={i}>
@@ -98,8 +99,8 @@ const Table: FC<Props> = ({
                     ) : typeof item[headItem] === "boolean" ? (
                       <Check
                         checked={item[headItem]}
-                        label=""
                         name="isActive"
+                        disabled={true}
                       />
                     ) : (
                       item[headItem]
