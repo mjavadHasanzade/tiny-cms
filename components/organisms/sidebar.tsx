@@ -58,20 +58,20 @@ const Sidebar = (props: Props) => {
             <span>Site Settings</span>
           </LinkItemST>
         </Link>
-        <Link href="/admin/site-settings" passHref>
+        <Link href="/admin/site-statistics" passHref>
           <LinkItemST
             className={
-              router.pathname == "/admin/site-settings" ? "active" : ""
+              router.pathname == "/admin/site-statistics" ? "active" : ""
             }
           >
             <RiBubbleChartLine className="icon" />
             <span>Site Statistics</span>
           </LinkItemST>
         </Link>
-        <Link href="/admin/site-statistics" passHref>
+        <Link href="/admin/admin-settings" passHref>
           <LinkItemST
             className={
-              router.pathname == "/admin/site-statistics" ? "active" : ""
+              router.pathname == "/admin/admin-settings" ? "active" : ""
             }
           >
             <GrShieldSecurity className="icon" />
