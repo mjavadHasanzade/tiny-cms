@@ -21,6 +21,7 @@ export default async function handle(
     }
   } else {
     try {
+      req.body = JSON.parse(req.body);
       await prisma.settings.update({
         where: { id: Number(req.query.id) },
         data: req.body,
