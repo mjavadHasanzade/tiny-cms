@@ -2,31 +2,35 @@ import React, { FC } from "react";
 import styled from "styled-components";
 
 interface ICheckbox {
-  children: any;
-  className: "checkbox" | "switch" | "radio" | string;
-  onChange: () => void;
-  value?: string;
-  name?: string;
+  label?: any;
+  className?: "checkbox" | "switch" | "radio" | string;
+  onChange?: () => void;
+  checked?: boolean;
+  name: string;
+  disabled?: boolean;
 }
 
 const Checkbox: FC<ICheckbox> = ({
-  children,
+  label,
   onChange,
-  className,
-  value,
+  className = "checkbox",
+  checked,
   name,
+  disabled,
 }) => {
   return (
     <CheckBoxST>
       <input
-        id={name ? name : value}
+        id={name}
         type="checkbox"
         onChange={onChange}
         className={className}
-        value={value}
-        name={name ? name : value}
+        value={checked}
+        checked={checked ? "checked" : null}
+        name={name}
+        disabled={disabled}
       />
-      <label htmlFor={name ? name : value}>{children}</label>
+      <label htmlFor={name}>{label}</label>
     </CheckBoxST>
   );
 };
@@ -44,14 +48,14 @@ const CheckBoxST = styled.div`
 
   input[type="checkbox"],
   input[type="radio"] {
-    --active: var(--navbar);
+    --active: #000000;
     --active-inner: #fff;
-    --focus: 2px rgba(39, 94, 254, 0.3);
-    --border: #bbc1e1;
-    --border-hover: var(--navbar);
-    --background: #fff;
-    --disabled: #f6f8ff;
-    --disabled-inner: #e1e6f9;
+    --focus: 2px rgb(1, 2, 4);
+    --border: #0a0b10;
+    --border-hover: #fff;
+    --background: #cbc8c8;
+    --disabled: #86adad;
+    --disabled-inner: #000;
     -webkit-appearance: none;
     -moz-appearance: none;
     height: 21px;
