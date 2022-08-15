@@ -11,9 +11,11 @@ import theme from "@utils/theme";
 import { BiPencil } from "react-icons/bi";
 import { getCookie } from "@utils/cookie";
 import { useState } from "react";
+import jwt from "jsonwebtoken";
 
 interface ISiteSettingsPage {
   settings: string;
+  user: IUser;
 }
 
 interface ISettingKV {
@@ -41,7 +43,7 @@ const SiteSettings: NextPage<ISiteSettingsPage> = (props) => {
     });
   };
   return (
-    <Layout translations={""} isLogin={true}>
+    <Layout translations={""} isLogin={true} user={props.user}>
       <Seo title="Tiny CMS - Site Settings" />
       <SubContentToolsST>
         <Title
@@ -93,11 +95,33 @@ const SiteSettings: NextPage<ISiteSettingsPage> = (props) => {
 
 export default SiteSettings;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = getCookie("xauth", ctx.req.headers.cookie as string);
+  let user;
+
+  if (!token) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  try {
+    user = jwt.verify(token, "tinyCmsJwtKey");
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
   const settings = await prisma.settings.findMany();
 
   return {
-    props: { settings: JSON.stringify(settings) },
+    props: { settings: JSON.stringify(settings), user },
   };
 };
 

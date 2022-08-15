@@ -8,15 +8,18 @@ import { FiPlus } from "react-icons/fi";
 import Link from "next/link";
 import styled from "styled-components";
 import theme from "@utils/theme";
+import jwt from "jsonwebtoken";
+import { getCookie } from "@utils/cookie";
 
 interface IPostsPage {
   posts: string;
+  user: IUser;
 }
 
 const Posts: NextPage<IPostsPage> = (props) => {
   const posts: IPosts = JSON.parse(props.posts);
   return (
-    <Layout translations={""} isLogin={true}>
+    <Layout translations={""} isLogin={true} user={props.user}>
       <Seo title="Tiny CMS - Posts" />
       <SubContentToolsST>
         <Title
@@ -46,11 +49,33 @@ const Posts: NextPage<IPostsPage> = (props) => {
 
 export default Posts;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = getCookie("xauth", ctx.req.headers.cookie as string);
+  let user;
+
+  if (!token) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  try {
+    user = jwt.verify(token, "tinyCmsJwtKey");
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
   const posts = await prisma.post.findMany();
 
   return {
-    props: { posts: JSON.stringify(posts) },
+    props: { posts: JSON.stringify(posts), user },
   };
 };
 

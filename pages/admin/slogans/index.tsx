@@ -8,14 +8,17 @@ import { FiPlus } from "react-icons/fi";
 import Link from "next/link";
 import styled from "styled-components";
 import theme from "@utils/theme";
+import { getCookie } from "@utils/cookie";
+import jwt from "jsonwebtoken"
 
 interface ISloganPage {
   slogans: ISlogan[];
+  user: IUser;
 }
 
-const Slogans: NextPage<ISloganPage> = ({ slogans }) => {
+const Slogans: NextPage<ISloganPage> = ({ slogans, user }) => {
   return (
-    <Layout translations={""} isLogin={true}>
+    <Layout translations={""} isLogin={true} user={user}>
       <Seo title="Tiny CMS - Home" />
       <SubContentToolsST>
         <Title
@@ -45,11 +48,34 @@ const Slogans: NextPage<ISloganPage> = ({ slogans }) => {
 
 export default Slogans;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = getCookie("xauth", ctx.req.headers.cookie as string);
+  let user;
+
+  if (!token) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  try {
+    user = jwt.verify(token, "tinyCmsJwtKey");
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
   const slogans = await prisma.slogan.findMany();
 
   return {
-    props: { slogans },
+    props: { slogans, user },
   };
 };
 

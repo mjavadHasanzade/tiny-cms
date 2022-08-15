@@ -10,15 +10,18 @@ import { CgEye } from "react-icons/cg";
 import Table from "@organisms/table";
 import { getCookie } from "@utils/cookie";
 import jwt from "jsonwebtoken";
+import prisma from "lib/prisma";
 
-const TABLE = [
-  { id: 1, username: "Mjavad", comments: "آه هویریه" },
-  { id: 2, username: "Mohmo", comments: "چاپ بزرگ علامت نیومدنه" },
-];
+interface IHomePage {
+  slogansCount: number;
+  postsCount: number;
+  user: IUser;
+}
 
-const Home: NextPage = () => {
+const Home: NextPage<IHomePage> = ({ slogansCount, postsCount, user }) => {
+
   return (
-    <Layout translations={""} isLogin={true}>
+    <Layout translations={""} isLogin={true} user={user}>
       <Seo title="Tiny CMS - Home" />
       <Title
         hasBorder={false}
@@ -26,7 +29,7 @@ const Home: NextPage = () => {
         tag="h1"
         important="primary"
       >
-        Hello John
+        Hello {user.username}
       </Title>
       <Title
         hasBorder={false}
@@ -43,13 +46,13 @@ const Home: NextPage = () => {
         <Tile
           title="Posts"
           description="Total Posts"
-          counter="45"
+          counter={String(postsCount)}
           icon={<GrIteration />}
         />
         <Tile
           title="Slogans"
           description="Total Slogans"
-          counter="105"
+          counter={String(slogansCount)}
           icon={<GrHtml5 />}
         />
         <Tile
@@ -60,11 +63,15 @@ const Home: NextPage = () => {
         />
       </TilesWrapper>
       <TablesWrapper>
-        <Table body={TABLE} tablePath="/comments" title="Latest Comments" />
         <Table
-          body={[
-            { id: 1, email: "mjavad@loagency.de", text: "Hello I need Help" },
-          ]}
+          body={[]}
+          tablePath="/comments"
+          title="Latest Comments"
+          apiPath=""
+        />
+        <Table
+          apiPath=""
+          body={[]}
           tablePath="/forms"
           title="Latest Connections"
         />
@@ -77,10 +84,9 @@ export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = getCookie("xauth", ctx.req.headers.cookie as string);
+  let user;
 
-  const isAuth = jwt.verify(token, "tinyCmsJwtKey");
-
-  if (!token || !isAuth) {
+  if (!token) {
     return {
       redirect: {
         permanent: false,
@@ -89,8 +95,26 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
+  try {
+    user = jwt.verify(token, "tinyCmsJwtKey");
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  const postsCount = await prisma.post.count();
+  const slogansCount = await prisma.slogan.count();
+
   return {
-    props: {},
+    props: {
+      slogansCount,
+      postsCount,
+      user,
+    },
   };
 };
 

@@ -106,6 +106,7 @@ interface ILayout {
   isInnerPage?: boolean;
   isLogin?: boolean;
   translations: any;
+  user: IUser;
 }
 
 const Layout: FC<ILayout> = ({
@@ -113,6 +114,7 @@ const Layout: FC<ILayout> = ({
   translations,
   isInnerPage = false,
   isLogin = true,
+  user
 }) => {
   const { locale } = useRouter();
   const isRtl = locale === "fa";
@@ -127,7 +129,7 @@ const Layout: FC<ILayout> = ({
       <GlobalStyle />
       {children && (
         <Main isLogin={isLogin}>
-          {isLogin && <Sidebar />}
+          {isLogin && <Sidebar user={user} />}
           <div className="childrenContent">{children}</div>
         </Main>
       )}
@@ -149,5 +151,4 @@ const Main = styled.main<IMain>`
     flex: 0 0 ${(props) => (props.isLogin ? "85%" : "100%")};
     margin-left: auto;
   }
-
 `;

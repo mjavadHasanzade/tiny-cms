@@ -9,10 +9,14 @@ import {
   GrShieldSecurity,
 } from "react-icons/gr";
 import { RiSettingsLine, RiBubbleChartLine } from "react-icons/ri";
+import { MdPowerSettingsNew } from "react-icons/md";
 import { useRouter } from "next/router";
 import TClogo from "@atoms/tc-logo";
+import { deleteCookie } from "@utils/cookie";
 
-type Props = {};
+type Props = {
+  user: IUser;
+};
 
 const Sidebar = (props: Props) => {
   const router = useRouter();
@@ -88,7 +92,20 @@ const Sidebar = (props: Props) => {
           />
           <span className="active"></span>
         </div>
-        <strong>John Doe</strong>
+        <strong>{props.user.username}</strong>
+        <ActionsST>
+          <button
+            onClick={() => {
+              deleteCookie("xauth");
+              window.location.reload();
+            }}
+          >
+            <MdPowerSettingsNew />
+          </button>
+          <button>
+            <RiSettingsLine />
+          </button>
+        </ActionsST>
       </SidebarProfileAreaST>
     </SidebarContainerST>
   );
@@ -207,4 +224,20 @@ const ImageProfile = styled.img`
   height: 40px;
   border-radius: 10px;
   object-fit: cover;
+`;
+
+const ActionsST = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  button {
+    margin: 0.25rem 0.25rem 0 0;
+    border: none;
+    color: ${theme.colors.tertiary}cc;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+  }
 `;

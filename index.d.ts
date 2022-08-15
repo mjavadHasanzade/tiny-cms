@@ -40,3 +40,11 @@ interface ISubContent {
   content?: string;
   image?: string;
 }
+
+interface IUser {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+  phone: string;
+}
