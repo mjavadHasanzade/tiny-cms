@@ -1,9 +1,9 @@
-import Button from "@atoms/button";
-import Checkbox from "@atoms/check";
-import Input from "@atoms/input";
-import Quill from "@atoms/quill";
-import Seo from "@atoms/seo";
-import Layout from "@organisms/layout";
+import Button from "@admin/atoms/button";
+import Checkbox from "@admin/atoms/check";
+import Input from "@admin/atoms/input";
+import Quill from "@admin/atoms/quill";
+import Seo from "@admin/atoms/seo";
+import Layout from "@admin/organisms/layout";
 import { getCookie } from "@utils/cookie";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";

@@ -1,4 +1,4 @@
-import Title from "@atoms/title";
+import Title from "@admin/atoms/title";
 import theme from "@utils/theme";
 import React, { FC } from "react";
 import styled from "styled-components";

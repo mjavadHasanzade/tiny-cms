@@ -1,7 +1,7 @@
-import Button from "@atoms/button";
-import Input from "@atoms/input";
-import Seo from "@atoms/seo";
-import Title from "@atoms/title";
+import Button from "@admin/atoms/button";
+import Input from "@admin/atoms/input";
+import Seo from "@admin/atoms/seo";
+import Title from "@admin/atoms/title";
 import { deleteCookie, getCookie, setCookie } from "@utils/cookie";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";

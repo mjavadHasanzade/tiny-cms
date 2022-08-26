@@ -1,8 +1,8 @@
-import Layout from "@organisms/layout";
+import Layout from "@admin/organisms/layout";
 import type { GetServerSideProps, NextPage } from "next";
-import Title from "@atoms/title";
-import Seo from "@atoms/seo";
-import Table from "@organisms/table";
+import Title from "@admin/atoms/title";
+import Seo from "@admin/atoms/seo";
+import Table from "@admin/organisms/table";
 import prisma from "lib/prisma";
 import { FiPlus } from "react-icons/fi";
 import Link from "next/link";

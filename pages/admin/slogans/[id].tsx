@@ -1,8 +1,8 @@
-import Button from "@atoms/button";
-import Input from "@atoms/input";
-import Quill from "@atoms/quill";
-import Seo from "@atoms/seo";
-import Layout from "@organisms/layout";
+import Button from "@admin/atoms/button";
+import Input from "@admin/atoms/input";
+import Quill from "@admin/atoms/quill";
+import Seo from "@admin/atoms/seo";
+import Layout from "@admin/organisms/layout";
 import camelCase from "@utils/camel-case";
 import { getCookie } from "@utils/cookie";
 import theme from "@utils/theme";

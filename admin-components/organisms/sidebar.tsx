@@ -11,7 +11,7 @@ import {
 import { RiSettingsLine, RiBubbleChartLine } from "react-icons/ri";
 import { MdPowerSettingsNew } from "react-icons/md";
 import { useRouter } from "next/router";
-import TClogo from "@atoms/tc-logo";
+import TClogo from "@admin/atoms/tc-logo";
 import { deleteCookie } from "@utils/cookie";
 
 type Props = {

@@ -1,4 +1,4 @@
-import Title from "@atoms/title";
+import Title from "@admin/atoms/title";
 import objectExtracter from "@utils/objectExtracter";
 import theme from "@utils/theme";
 import React, { FC, useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { FiTrash2 } from "react-icons/fi";
 import Link from "next/link";
 // import { useToasts } from "react-toast-notifications";
 import generateDate from "@utils/dateGen";
-import Check from "@atoms/check";
+import Check from "@admin/atoms/check";
 import { getCookie } from "@utils/cookie";
 import prisma from "lib/prisma";
 import stripTags from "@utils/stripe-tags";

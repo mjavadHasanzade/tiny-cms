@@ -16,10 +16,14 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@organisms/*": ["components/organisms/*"],
-      "@molecules/*": ["components/molecules/*"],
+      "@organisms/*": ["admin-components/organisms/*"],
+      "@molecules/*": ["admin-components/molecules/*"],
+      "@atoms/*": ["admin-components/atoms/*"],
       "@utils/*": ["utils/*"],
-      "@atoms/*": ["components/atoms/*"]
+
+      "@admin/atoms/*": ["admin-components/atoms/*"],
+      "@admin/organisms/*": ["admin-components/organisms/*"],
+      "@admin/molecules/*": ["admin-components/molecules/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

@@ -1,13 +1,13 @@
-import Layout from "@organisms/layout";
+import Layout from "@admin/organisms/layout";
 import type { GetServerSideProps, NextPage } from "next";
-import Title from "@atoms/title";
-import Seo from "@atoms/seo";
+import Title from "@admin/atoms/title";
+import Seo from "@admin/atoms/seo";
 import theme from "@utils/theme";
 import styled from "styled-components";
-import Tile from "@molecules/tile";
+import Tile from "@admin/molecules/tile";
 import { GrIteration, GrHtml5 } from "react-icons/gr";
 import { CgEye } from "react-icons/cg";
-import Table from "@organisms/table";
+import Table from "@admin/organisms/table";
 import { getCookie } from "@utils/cookie";
 import jwt from "jsonwebtoken";
 import prisma from "lib/prisma";

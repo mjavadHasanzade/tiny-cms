@@ -1,7 +1,7 @@
-import Layout from "@organisms/layout";
+import Layout from "@admin/organisms/layout";
 import type { GetServerSideProps, NextPage } from "next";
-import Title from "@atoms/title";
-import Seo from "@atoms/seo";
+import Title from "@admin/atoms/title";
+import Seo from "@admin/atoms/seo";
 import styled from "styled-components";
 import theme from "@utils/theme";
 import { getCookie } from "@utils/cookie";
