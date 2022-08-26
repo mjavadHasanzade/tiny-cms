@@ -2,23 +2,60 @@ import Button from "@atoms/button";
 import Input from "@atoms/input";
 import Seo from "@atoms/seo";
 import Title from "@atoms/title";
+import { deleteCookie, getCookie, setCookie } from "@utils/cookie";
 import theme from "@utils/theme";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-type Props = {};
+const Login = () => {
+  const router = useRouter();
 
-const Login = (props: Props) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    const body = {
+      username,
+      password,
+    };
+    fetch("/api/login", {
+      method: "post",
+      body: JSON.stringify(body),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        deleteCookie("xauth");
+        setCookie("xauth", data.token, 10);
+        router.push("/admin");
+      })
+      .catch(() => {
+        router.push("/tc-login");
+      });
+  };
+
   return (
     <>
       <Seo title="Login" />
       <LoginST>
         <Title className="login__title">Login</Title>
         <LoginBoxST>
-          <Input type="text" name="Username" placeHolder="Username" />
-          <Input type="password" name="Password" placeHolder="Password" />
+          <Input
+            type="text"
+            name="Username"
+            placeHolder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <Input
+            type="password"
+            name="Password"
+            placeHolder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <div className="mt-4 d-flex justify-content-center">
-            <Button>Submit</Button>
+            <Button onClick={() => handleLogin()}>Submit</Button>
           </div>
         </LoginBoxST>
       </LoginST>
