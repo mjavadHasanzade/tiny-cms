@@ -4,17 +4,15 @@ import Input from "@atoms/input";
 import Quill from "@atoms/quill";
 import Seo from "@atoms/seo";
 import Layout from "@organisms/layout";
-import camelCase from "@utils/camel-case";
 import { getCookie } from "@utils/cookie";
-import theme from "@utils/theme";
-import prisma from "lib/prisma";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { FiPlus } from "react-icons/fi";
-import styled from "styled-components";
+import jwt from "jsonwebtoken";
 
-type Props = {};
+type Props = {
+  user: IUser;
+};
 
 const AddPost = (props: Props) => {
   const [title, setTitle] = useState<string>("");
@@ -38,7 +36,7 @@ const AddPost = (props: Props) => {
   };
 
   return (
-    <Layout translations={""} isLogin={true}>
+    <Layout translations={""} isLogin={true} user={props.user}>
       <Seo title="Add New Slogan" />
       <h1>Add New Post</h1>
       <Input
@@ -63,3 +61,32 @@ const AddPost = (props: Props) => {
 };
 
 export default AddPost;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = getCookie("xauth", ctx.req.headers.cookie as string);
+  let user;
+
+  if (!token) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  try {
+    user = jwt.verify(token, "tinyCmsJwtKey");
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  return {
+    props: { user },
+  };
+};

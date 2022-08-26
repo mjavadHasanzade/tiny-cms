@@ -6,6 +6,7 @@ import Layout from "@organisms/layout";
 import camelCase from "@utils/camel-case";
 import { getCookie } from "@utils/cookie";
 import theme from "@utils/theme";
+import jwt from "jsonwebtoken";
 import prisma from "lib/prisma";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -13,7 +14,9 @@ import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import styled from "styled-components";
 
-type Props = {};
+type Props = {
+  user: IUser;
+};
 
 const AddSlogn = (props: Props) => {
   const [title, setTitle] = useState<string>("");
@@ -63,7 +66,7 @@ const AddSlogn = (props: Props) => {
   };
 
   return (
-    <Layout translations={""} isLogin={true}>
+    <Layout translations={""} isLogin={true} user={props.user}>
       <Seo title="Add New Slogan" />
       <h1>Add New Slogan</h1>
       <Input
@@ -118,6 +121,35 @@ const AddSlogn = (props: Props) => {
 
 export default AddSlogn;
 
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = getCookie("xauth", ctx.req.headers.cookie as string);
+  let user;
+
+  if (!token) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  try {
+    user = jwt.verify(token, "tinyCmsJwtKey");
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  return {
+    props: { user },
+  };
+};
+
 const SubContentsST = styled.div`
   padding: 1rem;
 
@@ -155,8 +187,8 @@ const SubContentsST = styled.div`
     background-color: transparent;
     border: none;
     position: absolute;
-    top: .5rem;
-    right: .5rem;
+    top: 0.5rem;
+    right: 0.5rem;
     transform: scale(1.2) rotate(45deg);
   }
 `;

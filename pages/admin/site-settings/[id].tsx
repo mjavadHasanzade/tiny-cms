@@ -8,9 +8,11 @@ import prisma from "lib/prisma";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import jwt from "jsonwebtoken";
 
 type Props = {
   setting: string;
+  user: IUser;
 };
 
 const EditSetting = (props: Props) => {
@@ -35,9 +37,9 @@ const EditSetting = (props: Props) => {
   };
 
   return (
-    <Layout translations={""} isLogin={true}>
-      <Seo title="Add New Slogan" />
-      <h1>Add New Setting</h1>
+    <Layout translations={""} isLogin={true} user={props.user}>
+      <Seo title={`Edit ${key}`} />
+      <h1>Edit {key}</h1>
       <Input
         name="Key"
         placeHolder="Key"
@@ -62,6 +64,29 @@ const EditSetting = (props: Props) => {
 export default EditSetting;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = getCookie("xauth", ctx.req.headers.cookie as string);
+  let user;
+
+  if (!token) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  try {
+    user = jwt.verify(token, "tinyCmsJwtKey");
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
   const id = ctx.params?.id;
   try {
     if (!id) {
@@ -73,6 +98,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         setting: JSON.stringify(setting),
+        user,
       },
     };
   } catch (error) {

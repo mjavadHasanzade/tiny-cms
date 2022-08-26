@@ -6,8 +6,12 @@ import camelCase from "@utils/camel-case";
 import { getCookie } from "@utils/cookie";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import jwt from "jsonwebtoken";
+import { GetServerSideProps } from "next";
 
-type Props = {};
+type Props = {
+  user: IUser;
+};
 
 const AddSetting = (props: Props) => {
   const [key, setKey] = useState<string>("");
@@ -29,7 +33,7 @@ const AddSetting = (props: Props) => {
   };
 
   return (
-    <Layout translations={""} isLogin={true}>
+    <Layout translations={""} isLogin={true} user={props.user}>
       <Seo title="Add New Slogan" />
       <h1>Add New Setting</h1>
       <Input
@@ -54,3 +58,33 @@ const AddSetting = (props: Props) => {
 };
 
 export default AddSetting;
+
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = getCookie("xauth", ctx.req.headers.cookie as string);
+  let user;
+
+  if (!token) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  try {
+    user = jwt.verify(token, "tinyCmsJwtKey");
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  return {
+    props: { user },
+  };
+};

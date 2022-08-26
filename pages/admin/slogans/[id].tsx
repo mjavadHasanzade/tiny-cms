@@ -12,9 +12,11 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import styled from "styled-components";
+import jwt from "jsonwebtoken";
 
 type Props = {
   slogan: string;
+  user: IUser;
 };
 
 const Editslogn = (props: Props) => {
@@ -69,10 +71,10 @@ const Editslogn = (props: Props) => {
   };
 
   return (
-    <Layout translations={""} isLogin={true}>
+    <Layout translations={""} isLogin={true} user={props.user}>
       <Seo title={`Edit ${slogan.title}`} />
       <h1>Edit {slogan.title}</h1>
-      
+
       <Input
         name={slogan.title}
         placeHolder={slogan.title}
@@ -127,6 +129,29 @@ const Editslogn = (props: Props) => {
 export default Editslogn;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = getCookie("xauth", ctx.req.headers.cookie as string);
+  let user;
+
+  if (!token) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
+  try {
+    user = jwt.verify(token, "tinyCmsJwtKey");
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/tc-login",
+      },
+    };
+  }
+
   const id = ctx.params?.id;
   try {
     if (!id) {
@@ -139,6 +164,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         slogan: JSON.stringify(slogan),
+        user,
       },
     };
   } catch (error) {
