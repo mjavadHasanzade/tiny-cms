@@ -39,7 +39,7 @@ export default Title;
 interface ITitleST {
   hasBorder?: boolean;
   important?: "primary" | "secondary" | "thired";
-  styles?: CSSProperties;
+  styles?: string;
   tag?: React.ElementType | undefined;
 }
 
@@ -58,5 +58,5 @@ const TitleST = styled.h3<ITitleST>`
     props.hasBorder ? "1px solid" + theme.colors.primary : null};
   color: ${theme.colors.primary};
 
-  ${(props) => (props.styles ? props.styles : null)}
+  ${(props) => (props.styles ? props.styles : undefined)}
 `;

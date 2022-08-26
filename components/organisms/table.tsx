@@ -154,7 +154,7 @@ export const TableContainerST = styled.div<ITableContainerST>`
   }
 
   &::-webkit-scrollbar-track {
-    background-color: ${theme.colors.bgwhiteSmoke};
+    background-color: ${theme.colors.tertiary};
     border-radius: 5px;
   }
 

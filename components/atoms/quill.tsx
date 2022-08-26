@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 interface IQuill {
   value: string;
-  onChange: Function;
+  onChange: any;
   className?: string;
 }
 

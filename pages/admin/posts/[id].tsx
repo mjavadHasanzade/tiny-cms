@@ -50,14 +50,16 @@ const EditPost = (props: Props) => {
         onChange={(e) => setTitle(e.target.value)}
       />
 
-      <Quill value={description ? description : ""} onChange={setDescription} />
+      <Quill
+        value={description ? description : ""}
+        onChange={setDescription}
+      />
       <Checkbox
         className="switch"
         onChange={() => setCheckbox(!checkbox)}
         checked={checkbox}
         label="Publish Now"
         name="publishNow"
-        readonly={false}
       />
       <Button onClick={() => handleAddSlogan()}>Save</Button>
     </Layout>

@@ -53,7 +53,6 @@ const AddPost = (props: Props) => {
         checked={checkbox}
         label="Publish Now"
         name="publishNow"
-        readonly={false}
       />
       <Button onClick={() => handleAddSlogan()}>Save</Button>
     </Layout>

@@ -42,6 +42,7 @@ const Editslogn = (props: Props) => {
     id: number
   ) => {
     const scia = [...subContent];
+    //@ts-ignore
     scia[id][type] = value;
 
     setSubContent(scia);

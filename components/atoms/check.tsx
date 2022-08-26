@@ -25,8 +25,8 @@ const Checkbox: FC<ICheckbox> = ({
         type="checkbox"
         onChange={onChange}
         className={className}
-        value={checked}
-        checked={checked ? "checked" : null}
+        value={checked ? "checked" : undefined}
+        checked={checked ? true : false}
         name={name}
         disabled={disabled}
       />
