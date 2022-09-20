@@ -7,14 +7,17 @@ import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styled from "styled-components";
+import toast, { Toaster } from "react-hot-toast";
+import TClogo from "@atoms/tc-logo";
 
 const Login = () => {
   const router = useRouter();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [buttonLoading, setButtonLoading] = useState(false);
   const handleLogin = () => {
+    setButtonLoading(true);
     const body = {
       username,
       password,
@@ -25,11 +28,17 @@ const Login = () => {
     })
       .then(async (res) => {
         const data = await res.json();
+        if (res.status > 300) {
+          setButtonLoading(false);
+          return toast.error(data.message);
+        }
         deleteCookie("xauth");
         setCookie("xauth", data.token, 10);
         router.push("/admin");
+        setButtonLoading(false);
       })
       .catch(() => {
+        setButtonLoading(false);
         router.push("/tc-login");
       });
   };
@@ -55,10 +64,15 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <div className="mt-4 d-flex justify-content-center">
-            <Button onClick={() => handleLogin()}>Submit</Button>
+            {!buttonLoading ? (
+              <Button onClick={() => handleLogin()}>Submit</Button>
+            ) : (
+              <TClogo active={true} />
+            )}
           </div>
         </LoginBoxST>
       </LoginST>
+      <Toaster />
     </>
   );
 };
