@@ -5,7 +5,7 @@ import Seo from "@admin/atoms/seo";
 import Layout from "@admin/organisms/layout";
 import camelCase from "@utils/camel-case";
 import { getCookie } from "@utils/cookie";
-import theme from "@utils/theme";
+import theme from "@utils/admin/theme";
 import prisma from "lib/prisma";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";

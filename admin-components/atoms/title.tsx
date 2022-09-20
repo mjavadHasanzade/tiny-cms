@@ -1,4 +1,4 @@
-import theme from "@utils/theme";
+import theme from "@utils/admin/theme";
 import React, { FC, CSSProperties } from "react";
 import styled from "styled-components";
 

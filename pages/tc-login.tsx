@@ -3,7 +3,7 @@ import Input from "@admin/atoms/input";
 import Seo from "@admin/atoms/seo";
 import Title from "@admin/atoms/title";
 import { deleteCookie, getCookie, setCookie } from "@utils/cookie";
-import theme from "@utils/theme";
+import theme from "@utils/admin/theme";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styled from "styled-components";

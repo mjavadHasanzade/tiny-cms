@@ -23,7 +23,8 @@
 
       "@admin/atoms/*": ["admin-components/atoms/*"],
       "@admin/organisms/*": ["admin-components/organisms/*"],
-      "@admin/molecules/*": ["admin-components/molecules/*"]
+      "@admin/molecules/*": ["admin-components/molecules/*"],
+      "@admin/utils/*": ["utils/admin/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

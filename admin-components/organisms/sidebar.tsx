@@ -1,4 +1,4 @@
-import theme from "@utils/theme";
+import theme from "@utils/admin/theme";
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";

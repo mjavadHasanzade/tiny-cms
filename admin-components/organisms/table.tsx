@@ -1,6 +1,6 @@
 import Title from "@admin/atoms/title";
 import objectExtracter from "@utils/objectExtracter";
-import theme from "@utils/theme";
+import theme from "@utils/admin/theme";
 import React, { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { BiPencil } from "react-icons/bi";

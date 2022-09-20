@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from "next";
 import Title from "@admin/atoms/title";
 import Seo from "@admin/atoms/seo";
 import styled from "styled-components";
-import theme from "@utils/theme";
+import theme from "@utils/admin/theme";
 import { getCookie } from "@utils/cookie";
 import jwt from "jsonwebtoken";
 

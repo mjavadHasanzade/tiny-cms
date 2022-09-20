@@ -1,4 +1,4 @@
-import theme from "@utils/theme";
+import theme from "@utils/admin/theme";
 import React, { FC, useRef, useState } from "react";
 import { useEffect } from "react";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";

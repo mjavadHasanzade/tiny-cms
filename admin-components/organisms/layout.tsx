@@ -4,7 +4,7 @@ import styled, {
   createGlobalStyle,
   css,
 } from "styled-components";
-import theme from "@utils/theme";
+import theme from "@utils/admin/theme";
 import { media } from "@utils/media";
 
 import { useRouter } from "next/router";

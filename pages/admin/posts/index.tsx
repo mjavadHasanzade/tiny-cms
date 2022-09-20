@@ -7,7 +7,7 @@ import prisma from "lib/prisma";
 import { FiPlus } from "react-icons/fi";
 import Link from "next/link";
 import styled from "styled-components";
-import theme from "@utils/theme";
+import theme from "@utils/admin/theme";
 import jwt from "jsonwebtoken";
 import { getCookie } from "@utils/cookie";
 

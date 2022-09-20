@@ -2,7 +2,7 @@ import Layout from "@admin/organisms/layout";
 import type { GetServerSideProps, NextPage } from "next";
 import Title from "@admin/atoms/title";
 import Seo from "@admin/atoms/seo";
-import theme from "@utils/theme";
+import theme from "@utils/admin/theme";
 import styled from "styled-components";
 import Tile from "@admin/molecules/tile";
 import { GrIteration, GrHtml5 } from "react-icons/gr";
