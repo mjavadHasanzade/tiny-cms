@@ -9,6 +9,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import toast, { Toaster } from "react-hot-toast";
 import TClogo from "@atoms/tc-logo";
+import { GetServerSideProps } from "next";
+import prisma from "../lib/prisma";
 
 const Login = () => {
   const router = useRouter();
@@ -78,6 +80,22 @@ const Login = () => {
 };
 
 export default Login;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const admin = await prisma.user.findUnique({ where: { username: "admin" } });
+  if (!admin)
+    await prisma.user.create({
+      data: {
+        username: process.env.ADMIN_USERNAME as string,
+        password: process.env.ADMIN_PASSWORD as string,
+        email: process.env.ADMIN_EMAIL as string,
+      },
+    });
+
+  return {
+    props: {},
+  };
+};
 
 const LoginST = styled.div`
   background-color: ${theme.colors.white};
