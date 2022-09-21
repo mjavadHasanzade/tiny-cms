@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import styled from "styled-components";
 import jwt from "jsonwebtoken";
+import Message from "@admin/atoms/message";
 
 type Props = {
   slogan: string;
@@ -29,6 +30,9 @@ const Editslogn = (props: Props) => {
   const [subContent, setSubContent] = useState<Array<ISubContent>>(
     slogan.subContent || []
   );
+  const [name, setName] = useState<string>(slogan.name);
+  const [link, setLink] = useState<string>(slogan.link ? slogan.link : "");
+  const [message, setMessage] = useState<string>("");
 
   const addSubContentHandler = () => {
     const scia = [...subContent];
@@ -58,7 +62,8 @@ const Editslogn = (props: Props) => {
   const handleEditSlogan = () => {
     const body = {
       title,
-      name: camelCase(title),
+      link,
+      name,
       content,
       subContent: subContent,
     };
@@ -71,19 +76,59 @@ const Editslogn = (props: Props) => {
     });
   };
 
+  const handleTitleName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+    const reg = /^[a-zA-Z0-9$@$!%*?&#^-_. +]+$/;
+    if (e.target.value.length >= 0 && reg.test(e.target.value)) {
+      setName(camelCase(e.target.value));
+      setMessage("");
+    } else {
+      setName("");
+      setMessage(
+        "Dont Use Space and non English characters, only underScore Allowed"
+      );
+    }
+  };
+  const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const reg = /^[a-zA-Z0-9$@$!%*?&#^-_. +]+$/;
+    if (e.target.value.length >= 0 && reg.test(e.target.value)) {
+      setName(camelCase(e.target.value));
+      setMessage("");
+    } else {
+      setMessage(
+        "Dont Use Space and non English characters, only underScore Allowed"
+      );
+      setName("");
+    }
+  };
+
   return (
     <Layout translations={""} isLogin={true} user={props.user}>
       <Seo title={`Edit ${slogan.title}`} />
       <h1>Edit {slogan.title}</h1>
-
+      {message && <Message>{message}</Message>}
       <Input
-        name={slogan.title}
-        placeHolder={slogan.title}
+        name={"Title"}
+        placeHolder={"Title"}
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(e) => handleTitleName(e)}
+      />
+      <Input
+        name="Name"
+        placeHolder="Name"
+        value={name}
+        onChange={(e) => handleName(e)}
       />
 
       <Quill value={content ? content : ""} onChange={setContent} />
+
+      <Input
+        name="Link"
+        placeHolder="Link"
+        value={link}
+        onChange={(e) => setLink(e.target.value)}
+      />
+
       <SubContentToolsST>
         <h2>Sub Contents</h2>
         <button
@@ -109,6 +154,14 @@ const Editslogn = (props: Props) => {
               defaultValue={item.name}
               onChange={(e) =>
                 editSubContentsHandler(e.target.value, "name", index)
+              }
+            />
+            <input
+              type="text"
+              placeholder="Link"
+              defaultValue={item.link}
+              onChange={(e) =>
+                editSubContentsHandler(e.target.value, "link", index)
               }
             />
             <textarea
@@ -225,6 +278,7 @@ const SubContentToolsST = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 2rem;
 
   .subContent__button {
     display: flex;

@@ -27,8 +27,8 @@ export default async function handle(
 
     //@ts-ignore
     req.body.userId = req.user.id;
-    const { name, title, content, image, userId, subContent } = req.body;
-
+    const { name, title, content, image, userId, subContent, link } = req.body;
+    
     try {
       const slogan = await prisma.slogan.update({
         where: { id: Number(req.query.id) },
@@ -38,6 +38,7 @@ export default async function handle(
           image,
           userId,
           title,
+          link,
         },
       });
       await prisma.subContent.deleteMany({ where: { sloganId: slogan.id } });

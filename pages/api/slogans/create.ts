@@ -16,7 +16,7 @@ export default async function handle(
 
   //@ts-ignore
   req.body.userId = req.user.id;
-  const { name, title, content, image, userId, subContent } = req.body;
+  const { name, title, content, image, userId, subContent,link } = req.body;
 
   try {
     const slogan = await prisma.slogan.create({
@@ -26,6 +26,7 @@ export default async function handle(
         image,
         userId,
         title,
+        link,
         subContent: {
           create: subContent,
         },

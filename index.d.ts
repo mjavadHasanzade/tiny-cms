@@ -30,6 +30,7 @@ interface ISlogan {
   content?: string;
   image?: string;
   subContent?: ISubContent[];
+  link?: string;
 }
 
 interface ISubContent {
@@ -39,6 +40,7 @@ interface ISubContent {
   title?: string;
   content?: string;
   image?: string;
+  link?: string;
 }
 
 interface IUser {
