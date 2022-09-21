@@ -16,9 +16,9 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@organisms/*": ["admin-components/organisms/*"],
-      "@molecules/*": ["admin-components/molecules/*"],
-      "@atoms/*": ["admin-components/atoms/*"],
+      "@organisms/*": ["components/organisms/*"],
+      "@molecules/*": ["components/molecules/*"],
+      "@atoms/*": ["components/atoms/*"],
       "@utils/*": ["utils/*"],
 
       "@admin/atoms/*": ["admin-components/atoms/*"],
