@@ -2,13 +2,13 @@ import Button from "@admin/atoms/button";
 import Input from "@admin/atoms/input";
 import Seo from "@admin/atoms/seo";
 import Title from "@admin/atoms/title";
-import { deleteCookie, getCookie, setCookie } from "@utils/cookie";
+import { deleteCookie, setCookie } from "@utils/cookie";
 import theme from "@utils/admin/theme";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styled from "styled-components";
 import toast, { Toaster } from "react-hot-toast";
-import TClogo from "@atoms/tc-logo";
+import TClogo from "@admin/atoms/tc-logo";
 import { GetServerSideProps } from "next";
 import prisma from "../lib/prisma";
 
