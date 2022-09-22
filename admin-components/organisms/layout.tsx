@@ -9,6 +9,7 @@ import { media } from "@utils/media";
 
 import { useRouter } from "next/router";
 import Sidebar from "./sidebar";
+import { Toaster } from "react-hot-toast";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -114,7 +115,7 @@ const Layout: FC<ILayout> = ({
   translations,
   isInnerPage = false,
   isLogin = true,
-  user
+  user,
 }) => {
   const { locale } = useRouter();
   const isRtl = locale === "fa";
@@ -133,6 +134,7 @@ const Layout: FC<ILayout> = ({
           <div className="childrenContent">{children}</div>
         </Main>
       )}
+      <Toaster />
     </ThemeProvider>
   );
 };

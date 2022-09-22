@@ -89,6 +89,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
         username: process.env.ADMIN_USERNAME as string,
         password: process.env.ADMIN_PASSWORD as string,
         email: process.env.ADMIN_EMAIL as string,
+        role: "admin",
       },
     });
 

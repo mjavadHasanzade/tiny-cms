@@ -1,8 +1,7 @@
-import prisma from "../../lib/prisma";
-import { decode } from "../../utils/bcrypt";
+import prisma from "../../../lib/prisma";
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
-import { encode } from "../../utils/bcrypt";
+import { encode } from "../../../utils/bcrypt";
 
 // POST /api/post
 // Required fields in body: title
@@ -11,6 +10,7 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  req.body = JSON.parse(req.body);
   const { username } = req.body;
 
   const user = await prisma.user.findUnique({

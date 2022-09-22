@@ -11,6 +11,9 @@ import Table from "@admin/organisms/table";
 import { getCookie } from "@utils/cookie";
 import jwt from "jsonwebtoken";
 import prisma from "lib/prisma";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { toast } from "react-hot-toast";
 
 interface IHomePage {
   slogansCount: number;
@@ -19,6 +22,12 @@ interface IHomePage {
 }
 
 const Home: NextPage<IHomePage> = ({ slogansCount, postsCount, user }) => {
+  const router = useRouter();
+  useEffect(() => {
+    if (router.query.access === "denied") {
+      toast.error("Access Denied");
+    }
+  }, []);
 
   return (
     <Layout translations={""} isLogin={true} user={user}>

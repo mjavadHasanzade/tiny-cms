@@ -49,4 +49,5 @@ interface IUser {
   email: string;
   role: string;
   phone: string;
+  password?: string;
 }
