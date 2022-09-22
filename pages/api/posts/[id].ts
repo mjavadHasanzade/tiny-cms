@@ -21,7 +21,7 @@ export default async function handle(
         where: { postId: Number(req.query.id) },
       });
       await prisma.post.delete({ where: { id: Number(req.query.id) } });
-      res.send({ message: "Slogan Deleted Seccessfully" });
+      res.send({ message: "Post Deleted Seccessfully" });
     } catch (error) {
       res.status(400).send({ message: "invalid Id", error });
     }

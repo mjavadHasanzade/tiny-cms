@@ -18,5 +18,5 @@ export default async function handle(
 
   const settings = await prisma.settings.create({ data: req.body });
 
-  res.send({ settings });
+  res.send({ settings, message: "Setting Created Successfully" });
 }

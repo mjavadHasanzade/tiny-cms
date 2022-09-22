@@ -11,12 +11,14 @@ import { useState } from "react";
 import Button from "@admin/atoms/button";
 import toast from "react-hot-toast";
 import prisma from "lib/prisma";
+import { useAppContext } from "context/app-context";
 interface IAdminSettings {
   user: IUser;
   users: IUser[];
 }
 
 const AdminSettings: NextPage<IAdminSettings> = (props) => {
+  const {setLoaderActiver} = useAppContext();
   const [currentUsers, setCurrentUsers] = useState<Array<IUser>>(props.users);
   const [newUser, setNewUser] = useState({
     username: "",
@@ -42,6 +44,7 @@ const AdminSettings: NextPage<IAdminSettings> = (props) => {
   };
 
   const deleteSubContentHandler = (id: number) => {
+    setLoaderActiver(true);
     const cu = [...currentUsers];
     const scia = currentUsers.filter((item, index) => {
       if (item.id !== id) return item;
@@ -59,14 +62,17 @@ const AdminSettings: NextPage<IAdminSettings> = (props) => {
           return toast.error(data.message);
         }
         toast.success(data.message);
+        setLoaderActiver(false);
       })
       .catch((err) => {
         setCurrentUsers(cu);
+        setLoaderActiver(false);
         return toast.error(err.message);
       });
   };
 
   const handleAddUser = () => {
+    setLoaderActiver(true);
     fetch("/api/register", {
       method: "post",
       body: JSON.stringify(newUser),
@@ -77,8 +83,10 @@ const AdminSettings: NextPage<IAdminSettings> = (props) => {
           return toast.error(data.message);
         }
         toast.success(data.message);
+        setLoaderActiver(false);
       })
       .catch((err) => {
+        setLoaderActiver(false);
         return toast.error(err.message);
       });
   };

@@ -13,6 +13,8 @@ import Check from "@admin/atoms/check";
 import { getCookie } from "@utils/cookie";
 import prisma from "lib/prisma";
 import stripTags from "@utils/stripe-tags";
+import { useAppContext } from "context/app-context";
+import { toast } from "react-hot-toast";
 
 type Props = {
   head?: Array<string>;
@@ -41,8 +43,8 @@ const Table: FC<Props> = ({
   apiPath,
 }) => {
   const [tableBody, setTableBody] = useState(body);
-  // const { addToast } = useToasts();
-  //   const { setLoaderActiver } = useAppContext();
+
+  const { setLoaderActiver } = useAppContext();
 
   if (minus.length >= 1) {
     head = objectExtracter(tableBody.length >= 1 ? tableBody[0] : {}, minus);
@@ -53,7 +55,7 @@ const Table: FC<Props> = ({
   let cols = head.length;
 
   const deleteItem = async (path: string, id: number | string) => {
-    // setLoaderActiver(true);
+    setLoaderActiver(true);
     fetch(path + id, {
       method: "delete",
       headers: { xauth: getCookie("xauth", document.cookie) },
@@ -61,6 +63,9 @@ const Table: FC<Props> = ({
       const newrows = await fetch(apiPath);
       const tb = await newrows.json();
       setTableBody(tb.slogans);
+      setLoaderActiver(false)
+      const data = await res.json();
+      toast.success(data.message);
     });
   };
 

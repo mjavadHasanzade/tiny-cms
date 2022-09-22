@@ -13,6 +13,7 @@ import { MdPowerSettingsNew } from "react-icons/md";
 import { useRouter } from "next/router";
 import TClogo from "@admin/atoms/tc-logo";
 import { deleteCookie } from "@utils/cookie";
+import { useAppContext } from "context/app-context";
 
 type Props = {
   user: IUser;
@@ -20,12 +21,12 @@ type Props = {
 
 const Sidebar = (props: Props) => {
   const router = useRouter();
-
+  const { loaderActive } = useAppContext();
   return (
     <SidebarContainerST>
       <SidebarItemsST>
         <SidebarLogo>
-          <TClogo active={false} />
+          <TClogo active={loaderActive} />
         </SidebarLogo>
 
         {/* <p className="pTitle">Menu</p> */}

@@ -12,6 +12,8 @@ import { BiPencil } from "react-icons/bi";
 import { getCookie } from "@utils/cookie";
 import { useState } from "react";
 import jwt from "jsonwebtoken";
+import { useAppContext } from "context/app-context";
+import { toast } from "react-hot-toast";
 
 interface ISiteSettingsPage {
   settings: string;
@@ -29,17 +31,23 @@ const SiteSettings: NextPage<ISiteSettingsPage> = (props) => {
     JSON.parse(props.settings)
   );
 
+  const {setLoaderActiver} = useAppContext();
+
   const deleteItem = async (path: string, id: number | string) => {
-    // setLoaderActiver(true);
+    setLoaderActiver(true);
     fetch(path + id, {
       method: "delete",
       headers: { xauth: getCookie("xauth", document.cookie) },
     }).then(async (res) => {
+
       const newrows = await fetch(path, {
         headers: { xauth: getCookie("xauth", document.cookie) },
       });
       const tb = await newrows.json();
       setSetting(tb.settings);
+      setLoaderActiver(false);
+      const data = await res.json();
+      toast.success(data.message);
     });
   };
   return (

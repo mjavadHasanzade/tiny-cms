@@ -14,6 +14,8 @@ import { FiPlus } from "react-icons/fi";
 import styled from "styled-components";
 import jwt from "jsonwebtoken";
 import Message from "@admin/atoms/message";
+import { useAppContext } from "context/app-context";
+import { toast } from "react-hot-toast";
 
 type Props = {
   slogan: string;
@@ -33,6 +35,8 @@ const Editslogn = (props: Props) => {
   const [name, setName] = useState<string>(slogan.name);
   const [link, setLink] = useState<string>(slogan.link ? slogan.link : "");
   const [message, setMessage] = useState<string>("");
+
+  const { setLoaderActiver } = useAppContext();
 
   const addSubContentHandler = () => {
     const scia = [...subContent];
@@ -60,6 +64,7 @@ const Editslogn = (props: Props) => {
   };
 
   const handleEditSlogan = () => {
+    setLoaderActiver(true);
     const body = {
       title,
       link,
@@ -71,8 +76,11 @@ const Editslogn = (props: Props) => {
       method: "put",
       headers: { xAuth: getCookie("xauth", document.cookie) },
       body: JSON.stringify(body),
-    }).then(() => {
+    }).then(async (res) => {
       router.push("/admin/slogans");
+      setLoaderActiver(false);
+      const data = await res.json();
+      toast.success(data.message);
     });
   };
 

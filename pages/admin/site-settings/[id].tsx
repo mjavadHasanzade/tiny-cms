@@ -9,6 +9,8 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import jwt from "jsonwebtoken";
+import { toast } from "react-hot-toast";
+import { useAppContext } from "context/app-context";
 
 type Props = {
   setting: string;
@@ -17,12 +19,15 @@ type Props = {
 
 const EditSetting = (props: Props) => {
   const setting = JSON.parse(props.setting);
-
+  
   const [key, setKey] = useState<string>(setting.key);
   const [value, setValue] = useState<string>(setting.value);
   const router = useRouter();
 
+  const {setLoaderActiver} = useAppContext();
+
   const handleAddSetting = () => {
+    setLoaderActiver(true);
     const body = {
       key: camelCase(key),
       value,
@@ -31,8 +36,11 @@ const EditSetting = (props: Props) => {
       method: "put",
       headers: { xAuth: getCookie("xauth", document.cookie) },
       body: JSON.stringify(body),
-    }).then(() => {
+    }).then(async (res) => {
       router.push("/admin/site-settings");
+      setLoaderActiver(false);
+      const data = await res.json();
+      toast.success(data.message);
     });
   };
 

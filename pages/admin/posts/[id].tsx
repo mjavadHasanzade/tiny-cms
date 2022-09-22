@@ -10,6 +10,8 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import jwt from "jsonwebtoken";
+import { useAppContext } from "context/app-context";
+import { toast } from "react-hot-toast";
 
 type Props = {
   post: string;
@@ -23,8 +25,10 @@ const EditPost = (props: Props) => {
   const [description, setDescription] = useState<string>(post.description);
   const [checkbox, setCheckbox] = useState<boolean>(post.published);
   const router = useRouter();
+  const {setLoaderActiver} = useAppContext();
 
   const handleAddSlogan = () => {
+    setLoaderActiver(true)
     const body = {
       title,
       description,
@@ -34,8 +38,11 @@ const EditPost = (props: Props) => {
       method: "put",
       headers: { xAuth: getCookie("xauth", document.cookie) },
       body: JSON.stringify(body),
-    }).then(() => {
+    }).then(async (res) => {
       router.push("/admin/posts");
+      setLoaderActiver(false);
+      const data = await res.json();
+      toast.success(data.message);
     });
   };
 

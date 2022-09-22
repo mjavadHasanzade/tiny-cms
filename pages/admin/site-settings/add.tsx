@@ -8,6 +8,8 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import jwt from "jsonwebtoken";
 import { GetServerSideProps } from "next";
+import { useAppContext } from "context/app-context";
+import { toast } from "react-hot-toast";
 
 type Props = {
   user: IUser;
@@ -17,8 +19,10 @@ const AddSetting = (props: Props) => {
   const [key, setKey] = useState<string>("");
   const [value, setValue] = useState<string>("");
   const router = useRouter();
+  const {setLoaderActiver} = useAppContext();
 
   const handleAddSetting = () => {
+    setLoaderActiver(true);
     const body = {
       key: camelCase(key),
       value,
@@ -27,8 +31,11 @@ const AddSetting = (props: Props) => {
       method: "post",
       headers: { xAuth: getCookie("xauth", document.cookie) },
       body: JSON.stringify(body),
-    }).then(() => {
+    }).then(async (res) => {
       router.push("/admin/site-settings");
+      setLoaderActiver(false);
+      const data = await res.json();
+      toast.success(data.message);
     });
   };
 

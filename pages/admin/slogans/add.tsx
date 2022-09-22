@@ -14,6 +14,8 @@ import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import styled from "styled-components";
 import Message from "@admin/atoms/message";
+import { useAppContext } from "context/app-context";
+import { toast } from "react-hot-toast";
 
 type Props = {
   user: IUser;
@@ -28,6 +30,7 @@ const AddSlogn = (props: Props) => {
   const router = useRouter();
 
   const [subContent, setSubContent] = useState<Array<ISubContent>>([]);
+  const { setLoaderActiver } = useAppContext();
 
   const addSubContentHandler = () => {
     const scia = [...subContent];
@@ -62,12 +65,16 @@ const AddSlogn = (props: Props) => {
       content,
       subContent: subContent,
     };
+    setLoaderActiver(true);
     fetch("/api/slogans/create", {
       method: "post",
       headers: { xAuth: getCookie("xauth", document.cookie) },
       body: JSON.stringify(body),
-    }).then(() => {
+    }).then(async (res) => {
       router.push("/admin/slogans");
+      setLoaderActiver(false);
+      const data = await res.json();
+      toast.success(data.message);
     });
   };
 
