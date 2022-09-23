@@ -17,10 +17,8 @@ export default async function handle(
   if (!isAuth) return res.status(401).send({ message: "Access Denied !!!" });
 
   const objetName = req.query.objetName;
-  console.log(objetName);
 
   minioClient.removeObject("default", objetName, function (err: any) {
-    console.log(err);
     if (err) res.send({ message: "Error Deleting Object" });
 
     res.send({ message: "Object Deleted Successfully" });

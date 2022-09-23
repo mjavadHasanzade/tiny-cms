@@ -37,8 +37,6 @@ const Input: FC<IInput> = ({
     labelRef.current.click();
   }, []);
 
-  // console.log(inputRef.current.value);
-
   return (
     <InputContainer>
       <Inputer

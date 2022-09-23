@@ -16,7 +16,6 @@ export default async function handle(
   //@ts-ignore
   req.body.userId = req.user.id;
 
-  console.log(req.body);
   try {
     const post = await prisma.post.create({
       data: req.body,
