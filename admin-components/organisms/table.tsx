@@ -111,7 +111,7 @@ const Table: FC<Props> = ({
                     ) : headItem === "cover" ||
                       headItem === "image" ||
                       headItem === "img" ? (
-                      <img src={item[headItem]} alt={item[title]} />
+                      <img src={item[headItem]} alt={item["title"]} />
                     ) : (
                       item[headItem]
                     )}
