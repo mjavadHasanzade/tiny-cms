@@ -10,12 +10,13 @@ import jwt from "jsonwebtoken";
 import prisma from "lib/prisma";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import styled from "styled-components";
 import Message from "@admin/atoms/message";
 import { useAppContext } from "context/app-context";
 import { toast } from "react-hot-toast";
+import ImageSelector from "@admin/atoms/image-selector";
 
 type Props = {
   user: IUser;
@@ -31,6 +32,8 @@ const AddSlogn = (props: Props) => {
 
   const [subContent, setSubContent] = useState<Array<ISubContent>>([]);
   const { setLoaderActiver } = useAppContext();
+  const [image, setImage] = useState<string | undefined>();
+  const inputFile = useRef<HTMLInputElement>();
 
   const addSubContentHandler = () => {
     const scia = [...subContent];
@@ -63,6 +66,7 @@ const AddSlogn = (props: Props) => {
       name,
       link,
       content,
+      image: image ? image : "",
       subContent: subContent,
     };
     setLoaderActiver(true);
@@ -104,6 +108,51 @@ const AddSlogn = (props: Props) => {
     }
   };
 
+  const handleUploadFile = (e: Event) => {
+    //@ts-ignore
+    const file = e!.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setLoaderActiver(true);
+    fetch("/api/upload", {
+      body: formData,
+      method: "POST",
+      headers: { xauth: getCookie("xauth", document.cookie) },
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (res.status >= 300) throw new Error(data.message);
+        setLoaderActiver(false);
+        toast.success(data.message);
+        setImage(data.url);
+      })
+      .catch(async (err) => {
+        setLoaderActiver(false);
+        toast.error(err.message);
+      });
+  };
+
+  const handleDeleteUploadedFile = (url: string) => {
+    const urlItems = url.split("/");
+    setLoaderActiver(true);
+    fetch("/api/upload/" + urlItems[urlItems.length - 1], {
+      method: "DELETE",
+      headers: { xauth: getCookie("xauth", document.cookie) },
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (res.status >= 300) throw new Error(data.message);
+        setLoaderActiver(false);
+        toast.success(data.message);
+        setImage(undefined);
+      })
+      .catch(async (err) => {
+        setLoaderActiver(false);
+        toast.error(err.message);
+      });
+  };
+
   return (
     <Layout translations={""} isLogin={true} user={props.user}>
       <Seo title="Add New Slogan" />
@@ -132,6 +181,19 @@ const AddSlogn = (props: Props) => {
         value={link}
         onChange={(e) => setLink(e.target.value)}
       />
+
+      <ImageSelector
+        img={image}
+        onClick={() => inputFile.current?.click()}
+        onClickDelete={() => handleDeleteUploadedFile(image as string)}
+      >
+        <input
+          ref={inputFile}
+          type={"file"}
+          className="d-none"
+          onChange={(e) => handleUploadFile(e)}
+        />
+      </ImageSelector>
 
       <SubContentToolsST>
         <h2>Sub Contents</h2>

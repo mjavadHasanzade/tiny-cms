@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Title from "@admin/atoms/title";
 import objectExtracter from "@utils/objectExtracter";
 import theme from "@utils/admin/theme";
@@ -63,7 +64,7 @@ const Table: FC<Props> = ({
       const newrows = await fetch(apiPath);
       const tb = await newrows.json();
       setTableBody(tb.slogans);
-      setLoaderActiver(false)
+      setLoaderActiver(false);
       const data = await res.json();
       toast.success(data.message);
     });
@@ -107,6 +108,10 @@ const Table: FC<Props> = ({
                         name="isActive"
                         disabled={true}
                       />
+                    ) : headItem === "cover" ||
+                      headItem === "image" ||
+                      headItem === "img" ? (
+                      <img src={item[headItem]} alt={item[title]} />
                     ) : (
                       item[headItem]
                     )}
@@ -218,6 +223,12 @@ const TableItem = styled.span<ITableRows>`
           background-color: #fa5c34;
         }
       }
+    }
+
+    img{
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
     }
   }
 `;
