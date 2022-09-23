@@ -8,7 +8,7 @@ import { getCookie } from "@utils/cookie";
 import prisma from "lib/prisma";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { useRef, useState } from "react";
+import React, { ChangeEventHandler, useRef, useState } from "react";
 import jwt from "jsonwebtoken";
 import { useAppContext } from "context/app-context";
 import { toast } from "react-hot-toast";
@@ -30,7 +30,7 @@ const EditPost = (props: Props) => {
   const [cover, setCover] = useState<string | undefined>(post.cover);
   const inputFile = useRef<HTMLInputElement>();
 
-  const handleUploadFile = (e: Event) => {
+  const handleUploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     //@ts-ignore
     const file = e!.target.files[0];
     const formData = new FormData();
@@ -114,6 +114,7 @@ const EditPost = (props: Props) => {
         onClickDelete={() => handleDeleteUploadedFile(cover as string)}
       >
         <input
+        //@ts-ignore
           ref={inputFile}
           type={"file"}
           className="d-none"

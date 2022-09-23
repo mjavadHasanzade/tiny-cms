@@ -108,7 +108,7 @@ const AddSlogn = (props: Props) => {
     }
   };
 
-  const handleUploadFile = (e: Event) => {
+  const handleUploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     //@ts-ignore
     const file = e!.target.files[0];
     const formData = new FormData();
@@ -188,6 +188,7 @@ const AddSlogn = (props: Props) => {
         onClickDelete={() => handleDeleteUploadedFile(image as string)}
       >
         <input
+        //@ts-ignore
           ref={inputFile}
           type={"file"}
           className="d-none"
