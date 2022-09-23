@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:generate": "npx prisma generate && npm run prisma:format",
+    "prisma:format": "npx prisma format"
   },
   "dependencies": {
     "@prisma/client": "^3.15.2",
