@@ -25,7 +25,7 @@ services:
     ports:
       - '5432:5432'
 
-  pgadmin:
+  tiny-pgadmin:
     image: dpage/pgadmin4
     container_name: 'tiny-database-admin'
     env_file:
@@ -39,7 +39,7 @@ services:
     ports:
       - '5050:80'
 
-  minio:
+  tiny-minio:
     container_name: minio
     command: server --console-address :9001 --address :9000 /data
     env_file:
