@@ -50,4 +50,5 @@ interface IUser {
   role: string;
   phone: string;
   password?: string;
+  image?: string;
 }

@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import Router from "next/router";
+import jwt from "jsonwebtoken";
 interface IAppProvider {
   children: any;
 }
@@ -13,12 +14,15 @@ interface IAppProvider {
 interface ICtx {
   loaderActive: boolean;
   setLoaderActiver: (active: boolean) => void;
+  setUser: (user: IUser) => void;
+  user: IUser;
 }
 
 const AppContext = createContext<ICtx | any>({});
 
 const AppProvider: FC<IAppProvider> = ({ children }) => {
   const [loaderActive, setLoaderActive] = useState(true);
+  const [user, setUser] = useState<IUser>();
 
   useEffect(() => {
     Router.events.on("routeChangeStart", () => setLoaderActive(true));
@@ -57,6 +61,8 @@ const AppProvider: FC<IAppProvider> = ({ children }) => {
       value={{
         loaderActive,
         setLoaderActiver,
+        user,
+        setUser,
       }}
     >
       {children}

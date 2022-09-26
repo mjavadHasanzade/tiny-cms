@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import TClogo from "@admin/atoms/tc-logo";
 import { deleteCookie } from "@utils/cookie";
 import { useAppContext } from "context/app-context";
+import { userInfo } from "os";
 
 type Props = {
   user: IUser;
@@ -88,8 +89,11 @@ const Sidebar = (props: Props) => {
       <SidebarProfileAreaST>
         <div className="img__holder">
           <ImageProfile
-            className="img-fluid"
-            src="https://food-pricer.netlify.app/img/user.jpg"
+            src={
+              props.user.image
+                ? props.user.image
+                : "https://food-pricer.netlify.app/img/user.jpg"
+            }
           />
           <span className="active"></span>
         </div>
@@ -221,8 +225,8 @@ const SidebarProfileAreaST = styled.div`
 `;
 
 const ImageProfile = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
   object-fit: cover;
 `;

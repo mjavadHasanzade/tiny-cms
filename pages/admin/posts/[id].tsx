@@ -151,6 +151,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     user = jwt.verify(token, "tinyCmsJwtKey");
+    user = await prisma.user.findUnique({ where: { id: user.id } });
   } catch (error) {
     return {
       redirect: {

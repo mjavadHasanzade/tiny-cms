@@ -7,7 +7,6 @@ import camelCase from "@utils/camel-case";
 import { getCookie } from "@utils/cookie";
 import theme from "@utils/admin/theme";
 import jwt from "jsonwebtoken";
-import prisma from "lib/prisma";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
@@ -146,6 +145,7 @@ const AddSlogn = (props: Props) => {
         setLoaderActiver(false);
         toast.success(data.message);
         setImage(undefined);
+        fetch("/api/login/upload/"+user)
       })
       .catch(async (err) => {
         setLoaderActiver(false);
@@ -262,6 +262,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     user = jwt.verify(token, "tinyCmsJwtKey");
+    user = await prisma.user.findUnique({ where: { id: user.id } });
   } catch (error) {
     return {
       redirect: {

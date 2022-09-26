@@ -12,13 +12,15 @@ import Button from "@admin/atoms/button";
 import toast from "react-hot-toast";
 import prisma from "lib/prisma";
 import { useAppContext } from "context/app-context";
+import ImageSelector from "@admin/atoms/image-selector";
+import { useRef } from "react";
 interface IAdminSettings {
   user: IUser;
   users: IUser[];
 }
 
 const AdminSettings: NextPage<IAdminSettings> = (props) => {
-  const {setLoaderActiver} = useAppContext();
+  const { setLoaderActiver, user, setUser } = useAppContext();
   const [currentUsers, setCurrentUsers] = useState<Array<IUser>>(props.users);
   const [newUser, setNewUser] = useState({
     username: "",
@@ -27,6 +29,9 @@ const AdminSettings: NextPage<IAdminSettings> = (props) => {
     phone: "",
   });
   const [userActive, setUserActive] = useState(false);
+  const [image, setImage] = useState<string | undefined>(props.user.image);
+  const inputFile = useRef<HTMLInputElement>();
+  console.log(props.user);
 
   const editSubContentsHandler = (
     value: string,
@@ -91,6 +96,60 @@ const AdminSettings: NextPage<IAdminSettings> = (props) => {
       });
   };
 
+  const handleUploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //@ts-ignore
+    const file = e!.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setLoaderActiver(true);
+    fetch("/api/upload", {
+      body: formData,
+      method: "POST",
+      headers: { xauth: getCookie("xauth", document.cookie) },
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (res.status >= 300) throw new Error(data.message);
+        setLoaderActiver(false);
+        toast.success(data.message);
+        setImage(data.url);
+        fetch("/api/login/upload/" + user.id, {
+          method: "post",
+          body: JSON.stringify({ image: data.url }),
+          headers: { xauth: getCookie("xauth", document.cookie) },
+        }).then(() => {
+          const userInfo = { ...user };
+          userInfo.image = image;
+          setUser(user);
+        });
+      })
+      .catch(async (err) => {
+        setLoaderActiver(false);
+        toast.error(err.message);
+      });
+  };
+
+  const handleDeleteUploadedFile = (url: string) => {
+    const urlItems = url.split("/");
+    setLoaderActiver(true);
+    fetch("/api/upload/" + urlItems[urlItems.length - 1], {
+      method: "DELETE",
+      headers: { xauth: getCookie("xauth", document.cookie) },
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (res.status >= 300) throw new Error(data.message);
+        setLoaderActiver(false);
+        toast.success(data.message);
+        setImage(undefined);
+      })
+      .catch(async (err) => {
+        setLoaderActiver(false);
+        toast.error(err.message);
+      });
+  };
+
   return (
     <Layout translations={""} isLogin={true} user={props.user}>
       <Seo title="Tiny CMS - Admin Settings" />
@@ -105,112 +164,142 @@ const AdminSettings: NextPage<IAdminSettings> = (props) => {
         </Title>
       </SubContentToolsST>
 
-      <SubContentToolsST style={{ borderBottom: "1px solid" }}>
-        <Title
-          hasBorder={false}
-          styles={{ marginTop: "2rem" }}
-          tag="h4"
-          important="thired"
-        >
-          Add User
-        </Title>
-        {!userActive && (
-          <button
-            className="subContent__button"
-            onClick={() => setUserActive(true)}
-          >
-            <FiPlus />
-          </button>
-        )}
-      </SubContentToolsST>
-      <SubContentsST>
-        {userActive && (
-          <div className="subContent__item">
-            <button
-              className="subContent__button-delete"
-              onClick={() => setUserActive(false)}
-            >
-              <FiPlus />
-            </button>
-            <input
-              type="text"
-              placeholder="Username"
-              onChange={(e) =>
-                editSubContentsHandler(e.target.value, "username")
-              }
-            />
-            <input
-              type="text"
-              placeholder="Password"
-              onChange={(e) =>
-                editSubContentsHandler(e.target.value, "password")
-              }
-            />
-            <input
-              type="text"
-              placeholder="Email"
-              onChange={(e) => editSubContentsHandler(e.target.value, "email")}
-            />
-            <input
-              type="text"
-              placeholder="Phone"
-              onChange={(e) => editSubContentsHandler(e.target.value, "phone")}
-            />
-            <div className="mt-3">
-              <Button onClick={() => handleAddUser()}>Submit</Button>
-            </div>
-          </div>
-        )}
+      <Title
+        hasBorder={false}
+        styles={{ marginTop: "2rem" }}
+        tag="h5"
+        important="primary"
+      >
+        Upload Profile Photo
+      </Title>
 
-        {currentUsers.map((item, index) => {
-          return (
-            <div className="subContent__item" key={index}>
+      <ImageSelector
+        img={image}
+        onClick={() => inputFile.current?.click()}
+        onClickDelete={() => handleDeleteUploadedFile(image as string)}
+      >
+        <input
+          //@ts-ignore
+          ref={inputFile}
+          type={"file"}
+          className="d-none"
+          onChange={(e) => handleUploadFile(e)}
+        />
+      </ImageSelector>
+      {user?.role === "admin" && (
+        <>
+          <SubContentToolsST style={{ borderBottom: "1px solid" }}>
+            <Title
+              hasBorder={false}
+              styles={{ marginTop: "2rem" }}
+              tag="h4"
+              important="thired"
+            >
+              Add User
+            </Title>
+            {!userActive && (
               <button
-                className="subContent__button-delete"
-                onClick={() => deleteSubContentHandler(item.id)}
+                className="subContent__button"
+                onClick={() => setUserActive(true)}
               >
                 <FiPlus />
               </button>
-              <input
-                type="text"
-                placeholder="Username"
-                defaultValue={item.username}
-                readOnly
-                onChange={(e) =>
-                  editSubContentsHandler(e.target.value, "username")
-                }
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                defaultValue={item.password}
-                readOnly
-                onChange={(e) =>
-                  editSubContentsHandler(e.target.value, "password")
-                }
-              />
-              <input
-                type="text"
-                defaultValue={item.email}
-                placeholder="Email"
-                readOnly
-                onChange={(e) =>
-                  editSubContentsHandler(e.target.value, "email")
-                }
-              />
-              <input
-                type="text"
-                placeholder="Phone"
-                defaultValue={item.phone}
-                readOnly
-                onChange={(e) =>
-                  editSubContentsHandler(e.target.value, "phone")
-                }
-              />
-            </div>
-          );
-        })}
-      </SubContentsST>
+            )}
+          </SubContentToolsST>
+          <SubContentsST>
+            {userActive && (
+              <div className="subContent__item">
+                <button
+                  className="subContent__button-delete"
+                  onClick={() => setUserActive(false)}
+                >
+                  <FiPlus />
+                </button>
+                <input
+                  type="text"
+                  placeholder="Username"
+                  onChange={(e) =>
+                    editSubContentsHandler(e.target.value, "username")
+                  }
+                />
+                <input
+                  type="text"
+                  placeholder="Password"
+                  onChange={(e) =>
+                    editSubContentsHandler(e.target.value, "password")
+                  }
+                />
+                <input
+                  type="text"
+                  placeholder="Email"
+                  onChange={(e) =>
+                    editSubContentsHandler(e.target.value, "email")
+                  }
+                />
+                <input
+                  type="text"
+                  placeholder="Phone"
+                  onChange={(e) =>
+                    editSubContentsHandler(e.target.value, "phone")
+                  }
+                />
+                <div className="mt-3">
+                  <Button onClick={() => handleAddUser()}>Submit</Button>
+                </div>
+              </div>
+            )}
+
+            {currentUsers.map((item, index) => {
+              return (
+                <div className="subContent__item" key={index}>
+                  <button
+                    className="subContent__button-delete"
+                    onClick={() => deleteSubContentHandler(item.id)}
+                  >
+                    <FiPlus />
+                  </button>
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    defaultValue={item.username}
+                    readOnly
+                    onChange={(e) =>
+                      editSubContentsHandler(e.target.value, "username")
+                    }
+                  />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    defaultValue={item.password}
+                    readOnly
+                    onChange={(e) =>
+                      editSubContentsHandler(e.target.value, "password")
+                    }
+                  />
+                  <input
+                    type="text"
+                    defaultValue={item.email}
+                    placeholder="Email"
+                    readOnly
+                    onChange={(e) =>
+                      editSubContentsHandler(e.target.value, "email")
+                    }
+                  />
+                  <input
+                    type="text"
+                    placeholder="Phone"
+                    defaultValue={item.phone}
+                    readOnly
+                    onChange={(e) =>
+                      editSubContentsHandler(e.target.value, "phone")
+                    }
+                  />
+                </div>
+              );
+            })}
+          </SubContentsST>
+        </>
+      )}
     </Layout>
   );
 };
@@ -232,15 +321,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     user = jwt.verify(token, "tinyCmsJwtKey");
-    //@ts-ignore
-    if (user.role !== "admin") {
-      return {
-        redirect: {
-          permanent: false,
-          destination: "/admin?access=denied",
-        },
-      };
-    }
+    user = await prisma.user.findUnique({ where: { id: user.id } });
   } catch (error) {
     return {
       redirect: {

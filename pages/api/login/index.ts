@@ -1,5 +1,5 @@
-import prisma from "../../lib/prisma";
-import { decode } from "../../utils/bcrypt";
+import prisma from "lib/prisma";
+import { decode } from "utils/bcrypt";
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 

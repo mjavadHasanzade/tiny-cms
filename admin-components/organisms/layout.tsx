@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import styled, {
   ThemeProvider,
   createGlobalStyle,
@@ -6,10 +6,10 @@ import styled, {
 } from "styled-components";
 import theme from "@utils/admin/theme";
 import { media } from "@utils/media";
-
 import { useRouter } from "next/router";
 import Sidebar from "./sidebar";
 import { Toaster } from "react-hot-toast";
+import { useAppContext } from "context/app-context";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -119,6 +119,10 @@ const Layout: FC<ILayout> = ({
 }) => {
   const { locale } = useRouter();
   const isRtl = locale === "fa";
+  const { setUser } = useAppContext();
+  useEffect(() => {
+    setUser(user);
+  }, []);
 
   return (
     <ThemeProvider
