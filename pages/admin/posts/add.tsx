@@ -12,6 +12,7 @@ import jwt from "jsonwebtoken";
 import { useAppContext } from "context/app-context";
 import { toast } from "react-hot-toast";
 import ImageSelector from "@admin/atoms/image-selector";
+import prisma from "lib/prisma";
 
 type Props = {
   user: IUser;

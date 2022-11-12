@@ -2,7 +2,7 @@ version: '3.6'
 services:
 
   tiny-app:
-    container_name: app
+    container_name: 'tiny-app'
     build:
       context: .
       dockerfile: Dockerfile
@@ -40,7 +40,7 @@ services:
       - '5050:80'
 
   tiny-minio:
-    container_name: minio
+    container_name: 'tiny-minio'
     command: server --console-address :9001 --address :9000 /data
     env_file:
       - ./var/.env

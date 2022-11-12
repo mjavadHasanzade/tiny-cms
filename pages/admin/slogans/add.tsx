@@ -145,7 +145,8 @@ const AddSlogn = (props: Props) => {
         setLoaderActiver(false);
         toast.success(data.message);
         setImage(undefined);
-        fetch("/api/login/upload/"+user)
+        // @ts-ignore 
+        fetch("/api/login/upload/" + user);
       })
       .catch(async (err) => {
         setLoaderActiver(false);
@@ -188,7 +189,7 @@ const AddSlogn = (props: Props) => {
         onClickDelete={() => handleDeleteUploadedFile(image as string)}
       >
         <input
-        //@ts-ignore
+          //@ts-ignore
           ref={inputFile}
           type={"file"}
           className="d-none"
@@ -262,6 +263,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     user = jwt.verify(token, "tinyCmsJwtKey");
+    // @ts-ignore
     user = await prisma.user.findUnique({ where: { id: user.id } });
   } catch (error) {
     return {

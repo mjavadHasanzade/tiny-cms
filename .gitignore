@@ -37,3 +37,4 @@ yarn-error.log*
 
 /prisma/dev.sqlite
 var/
+.idea/
