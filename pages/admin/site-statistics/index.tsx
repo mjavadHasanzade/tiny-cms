@@ -6,6 +6,7 @@ import styled from "styled-components";
 import theme from "@utils/admin/theme";
 import { getCookie } from "@utils/cookie";
 import jwt from "jsonwebtoken";
+import prisma from "lib/prisma";
 
 interface ISiteStatistics {
   user: IUser;
@@ -33,7 +34,7 @@ export default SiteStatistics;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = getCookie("xauth", ctx.req.headers.cookie as string);
-  let user;
+  let user: any;
 
   if (!token) {
     return {

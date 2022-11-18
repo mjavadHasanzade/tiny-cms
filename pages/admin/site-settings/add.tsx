@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 import { GetServerSideProps } from "next";
 import { useAppContext } from "context/app-context";
 import { toast } from "react-hot-toast";
+import prisma from "lib/prisma";
 
 type Props = {
   user: IUser;
@@ -19,7 +20,7 @@ const AddSetting = (props: Props) => {
   const [key, setKey] = useState<string>("");
   const [value, setValue] = useState<string>("");
   const router = useRouter();
-  const {setLoaderActiver} = useAppContext();
+  const { setLoaderActiver } = useAppContext();
 
   const handleAddSetting = () => {
     setLoaderActiver(true);
@@ -66,10 +67,9 @@ const AddSetting = (props: Props) => {
 
 export default AddSetting;
 
-
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = getCookie("xauth", ctx.req.headers.cookie as string);
-  let user;
+  let user: any;
 
   if (!token) {
     return {

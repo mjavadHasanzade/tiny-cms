@@ -105,7 +105,7 @@ export default SiteSettings;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = getCookie("xauth", ctx.req.headers.cookie as string);
-  let user;
+  let user: any;
 
   if (!token) {
     return {
