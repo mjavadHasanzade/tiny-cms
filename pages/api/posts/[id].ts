@@ -25,6 +25,11 @@ export default async function handle(
     } catch (error) {
       res.status(400).send({ message: "invalid Id", error });
     }
+  } else if (req.method === "GET") {
+    const slogan = await prisma.post.findUnique({
+      where: { id: Number(req.query.id) },
+    });
+    res.send(slogan);
   } else {
     req.body = JSON.parse(req.body);
 

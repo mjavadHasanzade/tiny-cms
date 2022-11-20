@@ -8,32 +8,35 @@ import { FiTrash2 } from "react-icons/fi";
 
 type Props = {
   img?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   onClickDelete?: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
 const ImageSelector = (props: Props) => {
   return (
-    <ImageSelectorST>
-      {!props.img ? (
-        <div className="uploadIcon" onClick={props.onClick}>
-          <GoFile className="icon" />
-        </div>
-      ) : (
-        <ImageContainer>
-          <img src={ props.img} alt="image" />
-          <div className="actions">
-            <i>
-              <BiFullscreen className="icon edit" />
-            </i>
-            <i onClick={props.onClickDelete}>
-              <FiTrash2 className="icon delete" />
-            </i>
+    <ImageSelectorST className="image-selector">
+      <>
+        {console.log(props.img)}
+        {!props.img ? (
+          <div className="uploadIcon" onClick={props.onClick}>
+            <GoFile className="icon" />
           </div>
-        </ImageContainer>
-      )}
-      {props.children}
+        ) : (
+          <ImageContainer>
+            <img src={props.img} alt="image" />
+            <div className="actions">
+              <i>
+                <BiFullscreen className="icon edit" />
+              </i>
+              <i onClick={props.onClickDelete}>
+                <FiTrash2 className="icon delete" />
+              </i>
+            </div>
+          </ImageContainer>
+        )}
+        {props.children}
+      </>
     </ImageSelectorST>
   );
 };

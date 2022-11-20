@@ -40,7 +40,7 @@ const Editslogn = (props: Props) => {
 
   const { setLoaderActiver } = useAppContext();
 
-  const [image, setImage] = useState<string| undefined>();
+  const [image, setImage] = useState<string| undefined>(slogan.image);
   const inputFile = useRef<HTMLInputElement>();
 
   const addSubContentHandler = () => {
