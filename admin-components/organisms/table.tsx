@@ -5,7 +5,7 @@ import theme from "@utils/admin/theme";
 import React, { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { BiPencil } from "react-icons/bi";
-import { FiTrash2 } from "react-icons/fi";
+import { FiEye, FiTrash2 } from "react-icons/fi";
 // import { getAxiosInstanse } from "api/api";
 import Link from "next/link";
 // import { useToasts } from "react-toast-notifications";
@@ -16,6 +16,8 @@ import prisma from "lib/prisma";
 import stripTags from "@utils/stripe-tags";
 import { useAppContext } from "context/app-context";
 import { toast } from "react-hot-toast";
+import OffCanvas from "@admin/molecules/off-canvas";
+import RenderUI from "@utils/admin/render-ui";
 
 type Props = {
   head?: Array<string>;
@@ -44,6 +46,7 @@ const Table: FC<Props> = ({
   apiPath,
 }) => {
   const [tableBody, setTableBody] = useState(body);
+  const [offCanvasActive, setOffCanvasActive] = useState<any | null>();
 
   const { setLoaderActiver } = useAppContext();
 
@@ -70,77 +73,105 @@ const Table: FC<Props> = ({
     });
   };
 
+  const openCanvas = async (path: string, id: number | string) => {
+    setLoaderActiver(true);
+    fetch(path + id, {
+      method: "get",
+      headers: { xauth: getCookie("xauth", document.cookie) },
+    }).then(async (res) => {
+      setLoaderActiver(false);
+      const data = await res.json();
+      setOffCanvasActive(data);
+    });
+  };
+
   return (
-    <div>
-      {title && (
-        <Title className="p-0" important="thired" hasBorder={false}>
-          {title}
-        </Title>
-      )}
-      <TableContainerST height={height}>
-        <TableHead actions={actions} cols={cols}>
-          <span>#</span>
-          {head.length > 0 &&
-            head.map((headItem, index: number) => (
-              <span key={index}>{headItem}</span>
-            ))}
-        </TableHead>
+    <>
+      <OffCanvas active={!!offCanvasActive} handler={setOffCanvasActive}>
+        {offCanvasActive &&
+          Object.keys(offCanvasActive).map((oKey, index) => {
+            return <RenderUI key={index} oKey={oKey} value={offCanvasActive[oKey]} />;
+          })}
+      </OffCanvas>
+      <div>
+        {title && (
+          <Title className="p-0" important="thired" hasBorder={false}>
+            {title}
+          </Title>
+        )}
+        <TableContainerST height={height}>
+          <TableHead actions={actions} cols={cols}>
+            <span>#</span>
+            {head.length > 0 &&
+              head.map((headItem, index: number) => (
+                <span key={index}>{headItem}</span>
+              ))}
+          </TableHead>
 
-        {tableBody.length <= 0 && <NetFoundText>No Items Found</NetFoundText>}
+          {tableBody.length <= 0 && <NetFoundText>No Items Found</NetFoundText>}
 
-        {tableBody.map((item: any, index: number) => (
-          <TableItem actions={actions} key={index} cols={cols}>
-            <span>{index + 1}</span>
-            {head &&
-              head.length > 0 &&
-              head.map((headItem: any, i) =>
-                headItem === "content" || headItem === "description" ? (
-                  <span className="tableSimpleDescription">
-                    {stripTags(item[headItem])}
+          {tableBody.map((item: any, index: number) => (
+            <TableItem actions={actions} key={index} cols={cols}>
+              <span>{index + 1}</span>
+              {head &&
+                head.length > 0 &&
+                head.map((headItem: any, i) =>
+                  headItem === "content" || headItem === "description" ? (
+                    <span className="tableSimpleDescription">
+                      {stripTags(item[headItem])}
+                    </span>
+                  ) : (
+                    <span key={i}>
+                      {headItem === "createdAt" || headItem === "updatedAt" ? (
+                        generateDate(item[headItem], true)
+                      ) : typeof item[headItem] === "boolean" ? (
+                        <Check
+                          checked={item[headItem]}
+                          name="isActive"
+                          disabled={true}
+                        />
+                      ) : headItem === "cover" ||
+                        headItem === "image" ||
+                        headItem === "img" ? (
+                        <img src={item[headItem]} alt={item["title"]} />
+                      ) : (
+                        item[headItem]
+                      )}
+                    </span>
+                  )
+                )}
+              {actions && (
+                <>
+                  <span className="actions">
+                    <Link href={tablePath + item.id} passHref>
+                      <button className="edit">
+                        <BiPencil />
+                      </button>
+                    </Link>
                   </span>
-                ) : (
-                  <span key={i}>
-                    {headItem === "createdAt" || headItem === "updatedAt" ? (
-                      generateDate(item[headItem], true)
-                    ) : typeof item[headItem] === "boolean" ? (
-                      <Check
-                        checked={item[headItem]}
-                        name="isActive"
-                        disabled={true}
-                      />
-                    ) : headItem === "cover" ||
-                      headItem === "image" ||
-                      headItem === "img" ? (
-                      <img src={item[headItem]} alt={item["title"]} />
-                    ) : (
-                      item[headItem]
-                    )}
-                  </span>
-                )
-              )}
-            {actions && (
-              <>
-                <span className="actions">
-                  <Link href={tablePath + item.id} passHref>
-                    <button className="edit">
-                      <BiPencil />
+                  <span className="actions">
+                    <button
+                      className="delete"
+                      onClick={() => deleteItem(apiPath, item.id)}
+                    >
+                      <FiTrash2 />
                     </button>
-                  </Link>
-                </span>
-                <span className="actions">
-                  <button
-                    className="delete"
-                    onClick={() => deleteItem(apiPath, item.id)}
-                  >
-                    <FiTrash2 />
-                  </button>
-                </span>
-              </>
-            )}
-          </TableItem>
-        ))}
-      </TableContainerST>
-    </div>
+                  </span>
+                  <span className="actions">
+                    <button
+                      className="info"
+                      onClick={() => openCanvas(apiPath, item.id)}
+                    >
+                      <FiEye />
+                    </button>
+                  </span>
+                </>
+              )}
+            </TableItem>
+          ))}
+        </TableContainerST>
+      </div>
+    </>
   );
 };
 
@@ -181,7 +212,7 @@ const TableItem = styled.span<ITableRows>`
     padding: 0.6rem 0;
     flex: 0 0
       calc(
-        ${(props) => (props.actions ? "85%" : "95%")} /
+        ${(props) => (props.actions ? "80%" : "95%")} /
           ${(props) => (props.cols ? props.cols : 1)}
       );
     text-align: center;
@@ -222,10 +253,14 @@ const TableItem = styled.span<ITableRows>`
         &.delete {
           background-color: #fa5c34;
         }
+
+        &.info {
+          background-color: #8a8640;
+        }
       }
     }
 
-    img{
+    img {
       width: 50px;
       height: 50px;
       border-radius: 10px;
