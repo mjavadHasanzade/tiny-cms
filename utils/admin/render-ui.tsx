@@ -54,6 +54,18 @@ const renderer = (oKey: string, value: any) => {
         </SubContentWrapperST>
       );
 
+    case "object":
+    case "fields":
+      return Object.keys(value).map((oKey, index) => {
+        return (
+          <SubContentWrapperST key={index}>
+            <div>{oKey}</div>
+            <div>{value[oKey]}</div>
+          </SubContentWrapperST>
+        );
+      });
+      break;
+
     default:
       return <div>{JSON.stringify(value)}</div>;
       break;
@@ -74,7 +86,7 @@ export default RenderUI;
 const ItemST = styled.div`
   margin: 1rem 0;
   padding: 0 0.5rem;
-  font-size: .9rem;
+  font-size: 0.9rem;
   .title {
     border-bottom: 1px solid #0007;
     font-size: 1rem;
