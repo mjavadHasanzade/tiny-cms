@@ -31,7 +31,6 @@ const AdminSettings: NextPage<IAdminSettings> = (props) => {
   const [userActive, setUserActive] = useState(false);
   const [image, setImage] = useState<string | undefined>(props.user.image);
   const inputFile = useRef<HTMLInputElement>();
-  console.log(props.user);
 
   const editSubContentsHandler = (
     value: string,
