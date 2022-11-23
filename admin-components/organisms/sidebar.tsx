@@ -15,6 +15,7 @@ import TClogo from "@admin/atoms/tc-logo";
 import { deleteCookie } from "@utils/cookie";
 import { useAppContext } from "context/app-context";
 import { userInfo } from "os";
+import { FiMessageSquare } from "react-icons/fi";
 
 type Props = {
   user: IUser;
@@ -62,6 +63,16 @@ const Sidebar = (props: Props) => {
           >
             <RiSettingsLine className="icon" />
             <span>Site Settings</span>
+          </LinkItemST>
+        </Link>
+        <Link href="/admin/forms" passHref>
+          <LinkItemST
+            className={
+              router.pathname == "/admin/forms" ? "active" : ""
+            }
+          >
+            <FiMessageSquare className="icon" />
+            <span>Forms</span>
           </LinkItemST>
         </Link>
         <Link href="/admin/site-statistics" passHref>
