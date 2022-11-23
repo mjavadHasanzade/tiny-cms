@@ -1,5 +1,9 @@
 import Layout from "@admin/organisms/layout";
-import type { GetServerSideProps, NextPage } from "next";
+import type {
+  GetServerSideProps,
+  NextPage,
+  InferGetServerSidePropsType,
+} from "next";
 import Title from "@admin/atoms/title";
 import Seo from "@admin/atoms/seo";
 import theme from "@utils/admin/theme";
@@ -19,10 +23,22 @@ interface IHomePage {
   slogansCount: number;
   postsCount: number;
   user: IUser;
+  forms: IForms[];
+  comments: IComments[];
 }
 
-const Home: NextPage<IHomePage> = ({ slogansCount, postsCount, user }) => {
+const Home: NextPage<IHomePage> = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
+  const forms: IForms[] = JSON.parse(props.forms ? props.forms : "[]");
+  const comments: IComments[] = JSON.parse(
+    props.comments ? props.comments : "[]"
+  );
   const router = useRouter();
+  forms.map((i) => {
+    i.text = i.fields.description;
+    i.user = i.fields.name + " " + i.fields.family;
+  });
   useEffect(() => {
     if (router.query.access === "denied") {
       toast.error("Access Denied");
@@ -30,7 +46,7 @@ const Home: NextPage<IHomePage> = ({ slogansCount, postsCount, user }) => {
   }, []);
 
   return (
-    <Layout translations={""} isLogin={true} user={user}>
+    <Layout translations={""} isLogin={true} user={props.user}>
       <Seo title="Tiny CMS - Home" />
       <Title
         hasBorder={false}
@@ -38,7 +54,7 @@ const Home: NextPage<IHomePage> = ({ slogansCount, postsCount, user }) => {
         tag="h1"
         important="primary"
       >
-        Hello {user.username}
+        Hello {props.user.username}
       </Title>
       <Title
         hasBorder={false}
@@ -55,13 +71,13 @@ const Home: NextPage<IHomePage> = ({ slogansCount, postsCount, user }) => {
         <Tile
           title="Posts"
           description="Total Posts"
-          counter={String(postsCount)}
+          counter={String(props.postsCount)}
           icon={<GrIteration />}
         />
         <Tile
           title="Slogans"
           description="Total Slogans"
-          counter={String(slogansCount)}
+          counter={String(props.slogansCount)}
           icon={<GrHtml5 />}
         />
         <Tile
@@ -73,15 +89,17 @@ const Home: NextPage<IHomePage> = ({ slogansCount, postsCount, user }) => {
       </TilesWrapper>
       <TablesWrapper>
         <Table
-          body={[]}
+          body={comments}
           tablePath="/comments"
           title="Latest Comments"
+          minus={["id", "postId"]}
           apiPath=""
         />
         <Table
           apiPath=""
-          body={[]}
+          body={forms}
           tablePath="/forms"
+          minus={["fields", "description", "id"]}
           title="Latest Connections"
         />
       </TablesWrapper>
@@ -119,11 +137,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const postsCount = await prisma.post.count();
   const slogansCount = await prisma.slogan.count();
 
+  const forms = JSON.stringify(
+    await prisma.forms.findMany({ orderBy: { createdAt: "asc" }, take: 8 })
+  );
+
+  const comments = JSON.stringify(
+    await prisma.comment.findMany({ orderBy: { createdAt: "asc" }, take: 8 })
+  );
+
   return {
     props: {
       slogansCount,
       postsCount,
       user,
+      forms,
+      comments,
     },
   };
 };
