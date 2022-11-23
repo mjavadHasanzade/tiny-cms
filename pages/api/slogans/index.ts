@@ -9,8 +9,8 @@ export default async function handle(
   res: NextApiResponse
 ) {
   try {
-    const slogans = await prisma.slogan.findMany();
-    res.send({ slogans });
+    const rows = await prisma.slogan.findMany();
+    res.send({ rows });
   } catch (error) {
     res.send({ message: "Something Went Wrong", error });
   }
