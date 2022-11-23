@@ -17,6 +17,15 @@ interface IPosts {
   postComments: IComments[];
 }
 
+interface IForms {
+  id: number;
+  title: string;
+  description: string;
+  fields: { [key: string]: string };
+  user?: string;
+  text?: string;
+}
+
 interface IComments {
   id: number;
   userName: string;
