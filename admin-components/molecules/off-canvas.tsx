@@ -11,17 +11,21 @@ type Props = {
 const OffCanvas: FC<Props> = ({ children, active, handler }) => {
   useEffect(() => {
     if (active) {
-      const offcanvasContainer = document.querySelector(".offcanvasContainer");
-      let x = 0;
-      const anim = setInterval(() => animate(offcanvasContainer), 1);
-      const animate = (element: HTMLDivElement) => {
-        x--;
-        if (x == -25) {
-          clearInterval(anim);
-        } else {
-          element.style.left = `${x}%`;
-        }
-      };
+      const offcanvasContainer = document.querySelector<HTMLDivElement>(
+        ".offcanvasContainer"
+      );
+      if (offcanvasContainer) {
+        let x = 0;
+        const anim = setInterval(() => animate(offcanvasContainer), 1);
+        const animate = (element: HTMLDivElement) => {
+          x--;
+          if (x == -25) {
+            clearInterval(anim);
+          } else {
+            element.style.left = `${x}%`;
+          }
+        };
+      }
     }
   }, [active]);
 

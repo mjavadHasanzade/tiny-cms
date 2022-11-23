@@ -66,7 +66,7 @@ const Table: FC<Props> = ({
     }).then(async (res) => {
       const newrows = await fetch(apiPath);
       const tb = await newrows.json();
-      setTableBody(tb.slogans);
+      setTableBody(tb.rows);
       setLoaderActiver(false);
       const data = await res.json();
       toast.success(data.message);
@@ -90,7 +90,9 @@ const Table: FC<Props> = ({
       <OffCanvas active={!!offCanvasActive} handler={setOffCanvasActive}>
         {offCanvasActive &&
           Object.keys(offCanvasActive).map((oKey, index) => {
-            return <RenderUI key={index} oKey={oKey} value={offCanvasActive[oKey]} />;
+            return (
+              <RenderUI key={index} oKey={oKey} value={offCanvasActive[oKey]} />
+            );
           })}
       </OffCanvas>
       <div>
@@ -116,9 +118,11 @@ const Table: FC<Props> = ({
               {head &&
                 head.length > 0 &&
                 head.map((headItem: any, i) =>
-                  headItem === "content" || headItem === "description" ? (
+                  headItem === "content" ||
+                  headItem === "description" ||
+                  headItem === "text" ? (
                     <span className="tableSimpleDescription">
-                      {stripTags(item[headItem])}
+                      {stripTags(item[headItem]).slice(0, 15) + "..."}
                     </span>
                   ) : (
                     <span key={i}>
@@ -215,6 +219,10 @@ const TableItem = styled.span<ITableRows>`
         ${(props) => (props.actions ? "80%" : "95%")} /
           ${(props) => (props.cols ? props.cols : 1)}
       );
+    width: calc(
+      ${(props) => (props.actions ? "80%" : "95%")} /
+        ${(props) => (props.cols ? props.cols : 1)}
+    );
     text-align: center;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -231,7 +239,7 @@ const TableItem = styled.span<ITableRows>`
 
     &.tableSimpleDescription {
       white-space: nowrap;
-      justify-content: start;
+      justify-content: center;
     }
 
     &.actions {

@@ -17,7 +17,6 @@ const ImageSelector = (props: Props) => {
   return (
     <ImageSelectorST className="image-selector">
       <>
-        {console.log(props.img)}
         {!props.img ? (
           <div className="uploadIcon" onClick={props.onClick}>
             <GoFile className="icon" />

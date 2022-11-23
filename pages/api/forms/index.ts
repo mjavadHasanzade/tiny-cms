@@ -9,7 +9,7 @@ export default async function handle(
   res: NextApiResponse
 ) {
   try {
-    const rows = await prisma.slogan.findMany();
+    const rows = await prisma.forms.findMany();
     res.send({ rows });
   } catch (error) {
     res.send({ message: "Something Went Wrong", error });
