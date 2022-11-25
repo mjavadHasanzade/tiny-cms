@@ -30,7 +30,7 @@ const Page404 = (props: Props) => {
               <div className="h-3">4</div>
             </div>
             <div className="dExist">
-              the page you are looking for doesn't exist
+              {"the page you are looking for doesn't exist"}
             </div>
             <Link href={"/admin"}>
               <a className="backToDashboard">Back To Dashboard</a>
