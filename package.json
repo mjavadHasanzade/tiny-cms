@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "npx prettier --write .",
     "prisma:generate": "npx prisma generate && npm run prisma:format",
-    "prisma:format": "npx prisma format"
+    "prisma:format": "npx prisma format",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@prisma/client": "^3.15.2",
@@ -34,9 +36,17 @@
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
     "@types/styled-components": "^5.1.25",
-    "eslint": "8.18.0",
+    "eslint": "^8.28.0",
     "eslint-config-next": "12.1.6",
+    "eslint-config-prettier": "^8.5.0",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.4",
+    "prettier": "^2.8.0",
     "prisma": "^3.15.2",
     "typescript": "4.7.4"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   }
 }
