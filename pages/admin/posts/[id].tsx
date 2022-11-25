@@ -13,6 +13,7 @@ import jwt from "jsonwebtoken";
 import { useAppContext } from "context/app-context";
 import { toast } from "react-hot-toast";
 import ImageSelector from "@admin/atoms/image-selector";
+import { slugify } from "@utils/text-manipulate";
 
 type Props = {
   post: string;
@@ -24,6 +25,7 @@ const EditPost = (props: Props) => {
 
   const [title, setTitle] = useState<string>(post.title);
   const [description, setDescription] = useState<string>(post.description);
+  const [slug, setSlug] = useState<string>(post.slug);
   const [checkbox, setCheckbox] = useState<boolean>(post.published);
   const router = useRouter();
   const { setLoaderActiver } = useAppContext();
@@ -82,6 +84,7 @@ const EditPost = (props: Props) => {
       description,
       published: checkbox,
       cover: cover ? cover : "",
+      slug,
     };
     fetch("/api/posts/" + post.id, {
       method: "put",
@@ -103,7 +106,16 @@ const EditPost = (props: Props) => {
         name="Title"
         placeHolder="Title"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(e) => {
+          setTitle(e.target.value);
+          setSlug(slugify(e.target.value));
+        }}
+      />
+      <Input
+        name="Slug"
+        placeHolder="Slug"
+        value={slug}
+        onChange={(e) => setSlug(slugify(e.target.value))}
       />
 
       <Quill value={description ? description : ""} onChange={setDescription} />

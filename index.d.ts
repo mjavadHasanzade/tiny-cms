@@ -10,6 +10,7 @@ interface IAny {
 interface IPosts {
   id: number;
   title: string;
+  slug: string;
   description: string;
   cover?: string;
   createdAt: string;

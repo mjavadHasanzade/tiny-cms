@@ -13,6 +13,7 @@ import { useAppContext } from "context/app-context";
 import { toast } from "react-hot-toast";
 import ImageSelector from "@admin/atoms/image-selector";
 import prisma from "lib/prisma";
+import { slugify } from "@utils/text-manipulate";
 
 type Props = {
   user: IUser;
@@ -21,10 +22,11 @@ type Props = {
 const AddPost = (props: Props) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [slug, setSlug] = useState<string>("");
   const [checkbox, setCheckbox] = useState<boolean>(false);
   const router = useRouter();
   const { setLoaderActiver } = useAppContext();
-  const [cover, setCover] = useState<string| undefined>();
+  const [cover, setCover] = useState<string | undefined>();
   const inputFile = useRef<HTMLInputElement>();
 
   const handleUploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +81,7 @@ const AddPost = (props: Props) => {
       description,
       cover: cover ? cover : "",
       published: checkbox,
+      slug,
     };
     fetch("/api/posts/create", {
       method: "post",
@@ -100,7 +103,16 @@ const AddPost = (props: Props) => {
         name="Title"
         placeHolder="Title"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(e) => {
+          setTitle(e.target.value);
+          setSlug(slugify(e.target.value));
+        }}
+      />
+      <Input
+        name="Slug"
+        placeHolder="Slug"
+        value={slug}
+        onChange={(e) => setSlug(slugify(e.target.value))}
       />
 
       <Quill value={description ? description : ""} onChange={setDescription} />
@@ -110,7 +122,7 @@ const AddPost = (props: Props) => {
         onClickDelete={() => handleDeleteUploadedFile(cover as string)}
       >
         <input
-        //@ts-ignore
+          //@ts-ignore
           ref={inputFile}
           type={"file"}
           className="d-none"
