@@ -3,4 +3,4 @@ const stripTags = (str: string) => {
   return str.replace(regex, "");
 };
 
-export default stripTags
+export default stripTags;

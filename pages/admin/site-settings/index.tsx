@@ -31,7 +31,7 @@ const SiteSettings: NextPage<ISiteSettingsPage> = (props) => {
     JSON.parse(props.settings)
   );
 
-  const {setLoaderActiver} = useAppContext();
+  const { setLoaderActiver } = useAppContext();
 
   const deleteItem = async (path: string, id: number | string) => {
     setLoaderActiver(true);
@@ -39,7 +39,6 @@ const SiteSettings: NextPage<ISiteSettingsPage> = (props) => {
       method: "delete",
       headers: { xauth: getCookie("xauth", document.cookie) },
     }).then(async (res) => {
-
       const newrows = await fetch(path, {
         headers: { xauth: getCookie("xauth", document.cookie) },
       });

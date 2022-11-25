@@ -67,9 +67,7 @@ const Sidebar = (props: Props) => {
         </Link>
         <Link href="/admin/forms" passHref>
           <LinkItemST
-            className={
-              router.pathname == "/admin/forms" ? "active" : ""
-            }
+            className={router.pathname == "/admin/forms" ? "active" : ""}
           >
             <FiMessageSquare className="icon" />
             <span>Forms</span>

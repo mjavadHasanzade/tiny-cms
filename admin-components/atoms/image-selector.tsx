@@ -29,7 +29,9 @@ const ImageSelector = (props: Props) => {
             onClick={() => setFullWidth(false)}
           ></BackgroundCloserST>
           <FullWidthMenuBar className="menuBarImageSelector">
-            <div className="text">{props.name ? props.name : props.img.split('/').pop()}</div>
+            <div className="text">
+              {props.name ? props.name : props.img.split("/").pop()}
+            </div>
             <span className="icon" onClick={() => setFullWidth(false)}>
               <FiPlus />
             </span>

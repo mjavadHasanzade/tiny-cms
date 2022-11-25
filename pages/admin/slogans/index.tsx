@@ -9,7 +9,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import theme from "@utils/admin/theme";
 import { getCookie } from "@utils/cookie";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 interface ISloganPage {
   slogans: ISlogan[];

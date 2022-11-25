@@ -1,8 +1,7 @@
-version: '3.6'
+version: "3.6"
 services:
-
   tiny-app:
-    container_name: 'tiny-app'
+    container_name: "tiny-app"
     build:
       context: .
       dockerfile: Dockerfile
@@ -16,18 +15,18 @@ services:
       - ./var/.env
 
   tiny-database:
-    image: 'postgres'
-    container_name: 'tiny-database'
+    image: "postgres"
+    container_name: "tiny-database"
     env_file:
       - ./.env
     volumes:
       - ./var/tiny-database-data:/var/lib/postgresql/data/
     ports:
-      - '5432:5432'
+      - "5432:5432"
 
   tiny-pgadmin:
     image: dpage/pgadmin4
-    container_name: 'tiny-database-admin'
+    container_name: "tiny-database-admin"
     env_file:
       - ./.env
     links:
@@ -37,17 +36,17 @@ services:
     volumes:
       - ./var/tiny-pgadmin:/root/.pgadmin
     ports:
-      - '5050:80'
+      - "5050:80"
 
   tiny-minio:
-    container_name: 'tiny-minio'
+    container_name: "tiny-minio"
     command: server --console-address :9001 --address :9000 /data
     env_file:
       - ./var/.env
     image: minio/minio
     ports:
-      - '9000:9000'
-      - '9001:9001'
+      - "9000:9000"
+      - "9001:9001"
 
     volumes:
       - ./var/minio:/data

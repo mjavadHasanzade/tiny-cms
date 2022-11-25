@@ -14,7 +14,7 @@ export default async function handle(
   if (!isAuth) return res.status(401).send({ message: "Access Denied !!!" });
   const id = req.query.id;
   req.body = JSON.parse(req.body);
-  
+
   await prisma.user.update({
     where: { id: Number(id) },
     data: { image: req.body.image },
