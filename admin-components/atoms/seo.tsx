@@ -8,7 +8,7 @@ interface ISeo {
   favicon?: string;
 }
 
-const Seo: FC<ISeo> = ({ title, children, favicon = "/imgs/NSA.png" }) => {
+const Seo: FC<ISeo> = ({ title, children, favicon = "/imgs/fav.png" }) => {
   return (
     <Head>
       <title>{title}</title>
