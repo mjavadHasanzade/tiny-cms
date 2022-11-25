@@ -121,7 +121,7 @@ const Table: FC<Props> = ({
                   headItem === "content" ||
                   headItem === "description" ||
                   headItem === "text" ? (
-                    <span className="tableSimpleDescription">
+                    <span key={i} className="tableSimpleDescription">
                       {stripTags(item[headItem]).slice(0, 15) + "..."}
                     </span>
                   ) : (
