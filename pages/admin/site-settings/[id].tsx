@@ -2,7 +2,7 @@ import Button from "@admin/atoms/button";
 import Input from "@admin/atoms/input";
 import Seo from "@admin/atoms/seo";
 import Layout from "@admin/organisms/layout";
-import camelCase from "@utils/camel-case";
+import { camelCase } from "@utils/text-manipulate";
 import { getCookie } from "@utils/cookie";
 import prisma from "lib/prisma";
 import { GetServerSideProps } from "next";

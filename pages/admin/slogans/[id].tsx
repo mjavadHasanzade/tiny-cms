@@ -3,7 +3,7 @@ import Input from "@admin/atoms/input";
 import Quill from "@admin/atoms/quill";
 import Seo from "@admin/atoms/seo";
 import Layout from "@admin/organisms/layout";
-import camelCase from "@utils/camel-case";
+import { camelCase } from "@utils/text-manipulate";
 import { getCookie } from "@utils/cookie";
 import theme from "@utils/admin/theme";
 import prisma from "lib/prisma";
