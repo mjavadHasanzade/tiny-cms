@@ -19,12 +19,12 @@ type Props = {
 
 const EditSetting = (props: Props) => {
   const setting = JSON.parse(props.setting);
-  
+
   const [key, setKey] = useState<string>(setting.key);
   const [value, setValue] = useState<string>(setting.value);
   const router = useRouter();
 
-  const {setLoaderActiver} = useAppContext();
+  const { setLoaderActiver } = useAppContext();
 
   const handleAddSetting = () => {
     setLoaderActiver(true);
@@ -97,6 +97,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const id = ctx.params?.id;
+  if (isNaN(Number(id))) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/admin/404",
+      },
+    };
+  }
   try {
     if (!id) {
       throw new Error("Invalid Id");
@@ -104,6 +112,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const setting = await prisma.settings.findUnique({
       where: { id: Number(id) },
     });
+    if (!setting) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/admin/404",
+        },
+      };
+    }
     return {
       props: {
         setting: JSON.stringify(setting),

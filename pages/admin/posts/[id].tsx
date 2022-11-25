@@ -8,7 +8,7 @@ import { getCookie } from "@utils/cookie";
 import prisma from "lib/prisma";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { ChangeEventHandler, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import jwt from "jsonwebtoken";
 import { useAppContext } from "context/app-context";
 import { toast } from "react-hot-toast";
@@ -114,7 +114,7 @@ const EditPost = (props: Props) => {
         onClickDelete={() => handleDeleteUploadedFile(cover as string)}
       >
         <input
-        //@ts-ignore
+          //@ts-ignore
           ref={inputFile}
           type={"file"}
           className="d-none"
@@ -162,13 +162,26 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const id = ctx.params?.id;
+  if (isNaN(Number(id))) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/admin/404",
+      },
+    };
+  }
   try {
-    if (!id) {
-      throw new Error("Invalid Id");
-    }
     const post = await prisma.post.findUnique({
       where: { id: Number(id) },
     });
+    if (!post) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/admin/404",
+        },
+      };
+    }
     return {
       props: {
         post: JSON.stringify(post),

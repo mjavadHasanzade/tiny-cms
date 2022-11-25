@@ -40,7 +40,7 @@ const Editslogn = (props: Props) => {
 
   const { setLoaderActiver } = useAppContext();
 
-  const [image, setImage] = useState<string| undefined>(slogan.image);
+  const [image, setImage] = useState<string | undefined>(slogan.image);
   const inputFile = useRef<HTMLInputElement>();
 
   const addSubContentHandler = () => {
@@ -194,7 +194,7 @@ const Editslogn = (props: Props) => {
         onClickDelete={() => handleDeleteUploadedFile(image as string)}
       >
         <input
-        //@ts-ignore
+          //@ts-ignore
           ref={inputFile}
           type={"file"}
           className="d-none"
@@ -281,14 +281,29 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const id = ctx.params?.id;
+  if (isNaN(Number(id))) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/admin/404",
+      },
+    };
+  }
   try {
-    if (!id) {
-      throw new Error("Invalid Id");
-    }
     const slogan = await prisma.slogan.findUnique({
       where: { id: Number(id) },
       include: { subContent: true },
     });
+
+    if (!slogan) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/admin/404",
+        },
+      };
+    }
+
     return {
       props: {
         slogan: JSON.stringify(slogan),
