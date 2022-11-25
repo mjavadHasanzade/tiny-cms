@@ -74,6 +74,7 @@ const OffCanvasSection = styled.div`
   z-index: 2;
   padding: 2.5rem 1.5rem;
   overflow-y: scroll;
+  overflow-x: visible;
   .content {
     width: 100%;
   }
